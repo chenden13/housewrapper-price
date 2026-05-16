@@ -1,6 +1,6 @@
 import React, { useState, useMemo } from 'react';
 import { Search, Tag, CheckSquare, ShieldCheck, Zap, Info, ArrowRight, Palette, Sun, LayoutPanelTop, MonitorPlay, Video, Car, Droplets, Sparkles, Gem, Wind, Waves } from 'lucide-react';
-import vehiclesData from './data/vehicles.json';
+import vehiclesData from '../data/vehicles.json';
 
 interface Vehicle {
   brand: string;
@@ -181,7 +181,7 @@ export const PriceInquiryPage: React.FC<PriceInquiryPageProps> = ({ vehicleMaste
         brand: b,
         model: m,
         size: v.size || 'M', // 貼膜用的新尺寸
-        detailingSize: dbSize || v.size || 'M' // 美容用的舊尺寸 (若無則用新尺寸)
+        detailingSize: (v as any).detailingSize || dbSize || v.size || 'M' // 優先讀取 JSON 內的美容尺寸
       });
     });
 
@@ -436,8 +436,9 @@ export const PriceInquiryPage: React.FC<PriceInquiryPageProps> = ({ vehicleMaste
                 </div>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: '15px' }}>
                   <div style={{ fontSize: '0.9rem', color: '#64748b' }}>單次施工 ({currentSize})</div>
-                  <div style={{ fontSize: '1.8rem', fontWeight: '900', color: '#64748b' }}>
-                    洽詢報價
+                  <div style={{ fontSize: '2rem', fontWeight: '900', color: '#1e293b' }}>
+                    <span style={{ fontSize: '1rem', marginRight: '4px' }}>$</span>
+                    {DETAILING_PRICING[currentSize]?.wash.toLocaleString()}
                   </div>
                 </div>
                 <ul style={{ padding: 0, margin: 0, listStyle: 'none', color: '#475569', fontSize: '0.9rem', display: 'flex', flexDirection: 'column', gap: '8px' }}>
@@ -456,8 +457,9 @@ export const PriceInquiryPage: React.FC<PriceInquiryPageProps> = ({ vehicleMaste
                 </div>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: '15px' }}>
                   <div style={{ fontSize: '0.9rem', color: '#64748b' }}>職人手作</div>
-                  <div style={{ fontSize: '1.8rem', fontWeight: '900', color: '#64748b' }}>
-                    洽詢報價
+                  <div style={{ fontSize: '2rem', fontWeight: '900', color: '#1e293b' }}>
+                    <span style={{ fontSize: '1rem', marginRight: '4px' }}>$</span>
+                    {DETAILING_PRICING[currentSize]?.interior.toLocaleString()}
                   </div>
                 </div>
                 <ul style={{ padding: 0, margin: 0, listStyle: 'none', color: '#475569', fontSize: '0.9rem', display: 'flex', flexDirection: 'column', gap: '8px' }}>
@@ -476,8 +478,9 @@ export const PriceInquiryPage: React.FC<PriceInquiryPageProps> = ({ vehicleMaste
                 </div>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: '15px' }}>
                   <div style={{ fontSize: '0.9rem', color: '#64748b' }}>漆面還原</div>
-                  <div style={{ fontSize: '1.8rem', fontWeight: '900', color: '#64748b' }}>
-                    洽詢報價
+                  <div style={{ fontSize: '2rem', fontWeight: '900', color: '#1e293b' }}>
+                    <span style={{ fontSize: '1rem', marginRight: '4px' }}>$</span>
+                    {DETAILING_PRICING[currentSize]?.miniDetail.toLocaleString()}
                   </div>
                 </div>
                 <ul style={{ padding: 0, margin: 0, listStyle: 'none', color: '#475569', fontSize: '0.9rem', display: 'flex', flexDirection: 'column', gap: '8px' }}>
@@ -495,8 +498,9 @@ export const PriceInquiryPage: React.FC<PriceInquiryPageProps> = ({ vehicleMaste
                 </div>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: '15px' }}>
                   <div style={{ fontSize: '0.9rem', color: '#64748b' }}>全車修復</div>
-                  <div style={{ fontSize: '1.8rem', fontWeight: '900', color: '#64748b' }}>
-                    洽詢報價
+                  <div style={{ fontSize: '2rem', fontWeight: '900', color: '#1e293b' }}>
+                    <span style={{ fontSize: '1rem', marginRight: '4px' }}>$</span>
+                    {DETAILING_PRICING[currentSize]?.fullDetail.toLocaleString()}
                   </div>
                 </div>
                 <ul style={{ padding: 0, margin: 0, listStyle: 'none', color: '#475569', fontSize: '0.9rem', display: 'flex', flexDirection: 'column', gap: '8px' }}>
@@ -529,8 +533,9 @@ export const PriceInquiryPage: React.FC<PriceInquiryPageProps> = ({ vehicleMaste
                   </div>
                   <div style={{ textAlign: 'right', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
                     <div style={{ color: '#94a3b8', fontSize: '0.9rem', marginBottom: '4px' }}>建議售價起</div>
-                    <div style={{ fontSize: '2.5rem', fontWeight: '900', color: '#64748b', lineHeight: 1 }}>
-                      洽詢報價
+                    <div style={{ fontSize: '3rem', fontWeight: '900', color: '#1e293b', lineHeight: 1 }}>
+                      <span style={{ fontSize: '1.2rem', marginRight: '4px' }}>$</span>
+                      {DETAILING_PRICING[currentSize]?.coating.toLocaleString()}
                     </div>
                     <div style={{ marginTop: '10px', fontSize: '0.8rem', color: '#8b5cf6', fontWeight: 'bold' }}>
                       * 視漆面狀況與鍍膜等級調整

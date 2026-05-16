@@ -1,8 +1,33 @@
 [
   {
-    "brand": "ALFA ROMEO",
-    "model": "33",
-    "size": "S"
+    "brand": "Porsche",
+    "model": "981 Boxster",
+    "size": "M",
+    "detailingSize": "S"
+  },
+  {
+    "brand": "Porsche",
+    "model": "981 Cayman",
+    "size": "M",
+    "detailingSize": "S"
+  },
+  {
+    "brand": "Porsche",
+    "model": "981 Boxster S",
+    "size": "M",
+    "detailingSize": "S"
+  },
+  {
+    "brand": "Porsche",
+    "model": "981 Cayman S",
+    "size": "M",
+    "detailingSize": "S"
+  },
+  {
+    "brand": "Porsche",
+    "model": "981 GT4",
+    "size": "M",
+    "detailingSize": "S"
   },
   {
     "brand": "DAIHATSU",
