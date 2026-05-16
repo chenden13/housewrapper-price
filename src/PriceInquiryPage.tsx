@@ -1,6 +1,6 @@
 import React, { useState, useMemo } from 'react';
 import { Search, Tag, CheckSquare, ShieldCheck, Zap, Info, ArrowRight, Palette, Sun, LayoutPanelTop, MonitorPlay, Video, Car, Droplets, Sparkles, Gem, Wind, Waves } from 'lucide-react';
-import vehiclesData from '../data/vehicles.json';
+import vehiclesData from './data/vehicles.json';
 
 interface Vehicle {
   brand: string;
