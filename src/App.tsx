@@ -9,23 +9,23 @@ function App() {
       <nav style={{ 
         padding: '15px 30px', 
         background: '#fff', 
-        borderBottom: '2px solid #f97316',
+        borderBottom: '2px solid #fb923c',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-between',
         position: 'sticky',
         top: 0,
         zIndex: 100,
-        boxShadow: '0 4px 6px -1px rgba(249, 115, 22, 0.1)'
+        boxShadow: '0 4px 6px -1px rgba(251, 146, 60, 0.1)'
       }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-          <img src="/logo.jpg" alt="好室多膜 LOGO" style={{ width: '60px', height: 'auto', borderRadius: '8px' }} />
+          <img src="./logo.jpg" alt="好室多膜 LOGO" style={{ width: '60px', height: 'auto', borderRadius: '8px' }} />
           <div>
-            <h1 style={{ margin: 0, fontSize: '1.6rem', fontWeight: '900', color: '#f97316' }}>好室多膜</h1>
-            <div style={{ fontSize: '0.9rem', color: '#f97316', fontWeight: 'bold', letterSpacing: '2px' }}>HOUSE WRAPPER</div>
+            <h1 style={{ margin: 0, fontSize: '1.6rem', fontWeight: '900', color: '#fb923c' }}>好室多膜</h1>
+            <div style={{ fontSize: '0.9rem', color: '#fb923c', fontWeight: 'bold', letterSpacing: '2px' }}>HOUSE WRAPPER</div>
           </div>
         </div>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: '#ea580c', fontSize: '1rem', fontWeight: '800', background: '#fff7ed', padding: '8px 16px', borderRadius: '20px', border: '1px solid #ffedd5' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: '#f97316', fontSize: '1rem', fontWeight: '800', background: '#fff7ed', padding: '8px 16px', borderRadius: '20px', border: '1px solid #ffedd5' }}>
           <ShieldCheck size={20} /> 好室多膜專屬查價系統
         </div>
       </nav>
