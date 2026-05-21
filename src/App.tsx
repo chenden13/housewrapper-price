@@ -5,40 +5,28 @@ import { ShieldCheck } from 'lucide-react';
 function App() {
   return (
     <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
-      {/* 頂部導航欄 / 品牌標誌 */}
+      {/* 頂部導航列 / 品牌標識 */}
       <nav style={{ 
         padding: '15px 30px', 
         background: '#fff', 
-        borderBottom: '1px solid #e2e8f0',
+        borderBottom: '2px solid #f97316',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-between',
         position: 'sticky',
         top: 0,
-        zIndex: 100
+        zIndex: 100,
+        boxShadow: '0 4px 6px -1px rgba(249, 115, 22, 0.1)'
       }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-          <div style={{ 
-            width: '40px', 
-            height: '40px', 
-            background: 'linear-gradient(135deg, #2563eb, #4f46e5)', 
-            borderRadius: '10px',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            color: '#fff',
-            fontWeight: '900',
-            fontSize: '1.2rem'
-          }}>
-            H
-          </div>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+          <img src="/logo.jpg" alt="好室多膜 LOGO" style={{ width: '60px', height: 'auto', borderRadius: '8px' }} />
           <div>
-            <h1 style={{ margin: 0, fontSize: '1.2rem', fontWeight: '900', color: '#1e293b' }}>好室多膜</h1>
-            <div style={{ fontSize: '0.7rem', color: '#64748b', fontWeight: 'bold', letterSpacing: '1px' }}>HOUSE WRAPPER</div>
+            <h1 style={{ margin: 0, fontSize: '1.6rem', fontWeight: '900', color: '#f97316' }}>好室多膜</h1>
+            <div style={{ fontSize: '0.9rem', color: '#f97316', fontWeight: 'bold', letterSpacing: '2px' }}>HOUSE WRAPPER</div>
           </div>
         </div>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: '#059669', fontSize: '0.85rem', fontWeight: '600', background: '#f0fdf4', padding: '6px 12px', borderRadius: '20px' }}>
-          <ShieldCheck size={16} /> 官方施工查價系統
+        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: '#ea580c', fontSize: '1rem', fontWeight: '800', background: '#fff7ed', padding: '8px 16px', borderRadius: '20px', border: '1px solid #ffedd5' }}>
+          <ShieldCheck size={20} /> 好室多膜專屬查價系統
         </div>
       </nav>
 

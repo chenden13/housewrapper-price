@@ -193,7 +193,7 @@ export const PriceInquiryPage: React.FC<PriceInquiryPageProps> = ({ vehicleMaste
       <header style={{ marginBottom: '30px', textAlign: 'center', paddingTop: onBack ? '10px' : '20px' }}>
         <h2 style={{ fontSize: '2rem', fontWeight: '900', color: 'var(--primary)', marginBottom: '10px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '15px' }}>
           {activeCategory === 'detailing' ? (
-            <><Sparkles size={32} color="#0ea5e9" /> 汽車美容報價查詢</>
+            <><Sparkles size={32} color="#f97316" /> 汽車美容報價查詢</>
           ) : (
             <><Palette size={32} color="#4f46e5" /> 貼膜施工報價查詢</>
           )}
@@ -276,7 +276,7 @@ export const PriceInquiryPage: React.FC<PriceInquiryPageProps> = ({ vehicleMaste
                       <span style={{ background: '#e0e7ff', color: '#4f46e5', fontSize: '0.75rem', padding: '4px 8px', borderRadius: '6px', fontWeight: 'bold' }}>
                         貼膜: {v.size || 'M'}
                       </span>
-                      <span style={{ background: '#e0f2fe', color: '#0ea5e9', fontSize: '0.75rem', padding: '4px 8px', borderRadius: '6px', fontWeight: 'bold' }}>
+                      <span style={{ background: '#e0f2fe', color: '#f97316', fontSize: '0.75rem', padding: '4px 8px', borderRadius: '6px', fontWeight: 'bold' }}>
                         洗車: {v.detailingSize || 'M'}
                       </span>
                       <ArrowRight size={16} color="#cbd5e1" />
@@ -321,7 +321,7 @@ export const PriceInquiryPage: React.FC<PriceInquiryPageProps> = ({ vehicleMaste
               justifyContent: 'center',
               gap: '8px',
               background: activeCategory === 'detailing' ? '#fff' : 'transparent',
-              color: activeCategory === 'detailing' ? '#0ea5e9' : '#64748b',
+              color: activeCategory === 'detailing' ? '#f97316' : '#64748b',
               boxShadow: activeCategory === 'detailing' ? '0 4px 6px -1px rgba(0, 0, 0, 0.1)' : 'none',
               transition: 'all 0.2s'
             }}
@@ -361,7 +361,7 @@ export const PriceInquiryPage: React.FC<PriceInquiryPageProps> = ({ vehicleMaste
             gap: '20px', 
             marginBottom: '30px', 
             background: activeCategory === 'detailing' 
-              ? 'linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%)' 
+              ? 'linear-gradient(135deg, #f97316 0%, #c2410c 100%)' 
               : 'linear-gradient(135deg, #4f46e5 0%, #4338ca 100%)', 
             padding: '25px 30px', 
             borderRadius: '24px', 
@@ -394,7 +394,7 @@ export const PriceInquiryPage: React.FC<PriceInquiryPageProps> = ({ vehicleMaste
 
               <div style={{ display: 'flex', flexDirection: 'column', gap: '40px', gridColumn: 'span 2' }}>
                 {[
-                  { title: "保養洗車、基本護理", icon: Droplets, theme: { main: '#0ea5e9', bg: '#f0f9ff', border: '#e0f2fe' }, items: detailingPrices.filter(i => ["經典洗", "光澤整備", "深層特勤", "鏡透打底Lv.1", "鏡透打底Lv.2", "視界去污"].includes(i.itemName)) },
+                  { title: "保養洗車、基本護理", icon: Droplets, theme: { main: '#f97316', bg: '#f0f9ff', border: '#e0f2fe' }, items: detailingPrices.filter(i => ["經典洗", "光澤整備", "深層特勤", "鏡透打底Lv.1", "鏡透打底Lv.2", "視界去污"].includes(i.itemName)) },
                   { title: "拋光鍍膜", icon: Sparkles, theme: { main: '#8b5cf6', bg: '#f5f3ff', border: '#ede9fe' }, items: detailingPrices.filter(i => ["S1單層護盾", "S1雙層護盾", "S2單層護盾", "S2雙層護盾", "視界強化", "鋁圈守護"].includes(i.itemName)) },
                   { title: "貼膜車專屬方案", icon: ShieldCheck, theme: { main: '#10b981', bg: '#ecfdf5', border: '#d1fae5' }, items: detailingPrices.filter(i => ["膜淨行動", "膜車專護方案"].includes(i.itemName)) }
                 ].map((group, gIdx) => {
@@ -487,7 +487,7 @@ export const PriceInquiryPage: React.FC<PriceInquiryPageProps> = ({ vehicleMaste
 
               {/* 溫馨提示區 */}
               <div className="glass-panel col-span-2" style={{ padding: '15px 20px', borderRadius: '16px', background: '#f8fafc', border: '1px solid #e2e8f0', display: 'flex', alignItems: 'center', gap: '10px', gridColumn: 'span 2' }}>
-                <Info size={18} color="#0ea5e9" />
+                <Info size={18} color="#f97316" />
                 <span style={{ fontSize: '0.85rem', color: '#64748b', fontWeight: '500' }}>
                   💡 <strong>洗車美容報價說明：</strong>此頁面僅供對應車型之「美容/洗車尺寸級距」查詢。實際施工金額與工時評估，請洽門市技術人員或參閱店內實體價目表。
                 </span>
@@ -600,7 +600,7 @@ export const PriceInquiryPage: React.FC<PriceInquiryPageProps> = ({ vehicleMaste
                 {/* Front PPF */}
                 <div>
                   <div style={{ fontWeight: 'bold', color: '#1e293b', marginBottom: '15px', display: 'flex', alignItems: 'center', gap: '8px' }}>
-                    <div style={{ width: '4px', height: '16px', background: '#0ea5e9', borderRadius: '2px' }}></div>
+                    <div style={{ width: '4px', height: '16px', background: '#f97316', borderRadius: '2px' }}></div>
                     重點防護 - 迎風面方案
                   </div>
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
