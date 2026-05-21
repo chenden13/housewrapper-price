@@ -1,6 +1,7 @@
 import React, { useState, useMemo } from 'react';
-import { Search, Tag, CheckSquare, ShieldCheck, Zap, Info, ArrowRight, Palette, Sun, LayoutPanelTop, MonitorPlay, Video, Car, Droplets, Sparkles, Gem, Wind, Waves } from 'lucide-react';
+import { Search, Tag, CheckSquare, ShieldCheck, Zap, Info, ArrowRight, Palette, Sun, LayoutPanelTop, MonitorPlay, Video, Car, Droplets, Sparkles, Gem, Wind, Waves, ChevronDown, ChevronUp, Star } from 'lucide-react';
 import vehiclesData from './data/vehicles.json';
+import detailingPrices from './data/detailing_prices.json';
 
 interface Vehicle {
   brand: string;
@@ -151,58 +152,12 @@ export const PriceInquiryPage: React.FC<PriceInquiryPageProps> = ({ vehicleMaste
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedVehicle, setSelectedVehicle] = useState<Vehicle | null>(null);
   const [activeCategory, setActiveCategory] = useState<'detailing' | 'film'>(initialMode || 'detailing');
+  const [expandedDetailing, setExpandedDetailing] = useState<string | null>(null);
 
-  // 合併內建與雲端資料
+  // 直接使用內建的 vehiclesData
   const fullMaster = useMemo(() => {
-    const list = Array.isArray(vehicleMaster) ? vehicleMaster : [];
-    
-    // 建立資料庫尺寸對照表 (用於美容)
-    const dbSizeMap = new Map();
-    list.forEach(v => {
-      const b = String(v.brand || '').trim();
-      const m = String(v.model || '').trim();
-      if (!b && !m) return;
-      const key = `${b}_${m}`.toLowerCase();
-      // 如果有多筆，保留第一筆看到的 (通常是舊資料)
-      if (!dbSizeMap.has(key)) dbSizeMap.set(key, v.size);
-    });
-
-    // 以新資料 (JSON) 為主體，但保留舊資料尺寸
-    const unique = new Map();
-    
-    // 1. 處理新版尺寸表 (用於貼膜)
-    vehiclesData.forEach(v => {
-      const b = String(v.brand || '').trim();
-      const m = String(v.model || '').trim();
-      const key = `${b}_${m}`.toLowerCase();
-      
-      const dbSize = dbSizeMap.get(key);
-      unique.set(key, {
-        brand: b,
-        model: m,
-        size: v.size || 'M', // 貼膜用的新尺寸
-        detailingSize: (v as any).detailingSize || dbSize || v.size || 'M' // 優先讀取 JSON 內的美容尺寸
-      });
-    });
-
-    // 2. 補上資料庫中有但新表沒有的車型
-    list.forEach(v => {
-      const b = String(v.brand || '').trim();
-      const m = String(v.model || '').trim();
-      const key = `${b}_${m}`.toLowerCase();
-      
-      if (!unique.has(key)) {
-        unique.set(key, {
-          brand: b,
-          model: m,
-          size: v.size || 'M',
-          detailingSize: v.size || 'M'
-        });
-      }
-    });
-
-    return Array.from(unique.values());
-  }, [vehicleMaster]);
+    return vehiclesData as any[];
+  }, []);
 
   const filteredVehicles = useMemo(() => {
     const term = (searchTerm || '').trim().toLowerCase();
@@ -436,110 +391,82 @@ export const PriceInquiryPage: React.FC<PriceInquiryPageProps> = ({ vehicleMaste
           {activeCategory === 'detailing' ? (
             /* 汽車美容報價內容 */
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '25px' }}>
-              {/* 精緻洗車 */}
-              <div className="glass-panel" style={{ padding: '25px', borderRadius: '24px', border: '1px solid #e2e8f0', background: '#fff' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '20px', color: '#0ea5e9' }}>
-                  <Waves size={24} />
-                  <h4 style={{ margin: 0, fontSize: '1.25rem', fontWeight: '800' }}>精緻洗車服務</h4>
-                </div>
-                <div style={{ marginBottom: '20px' }}>
-                  <div style={{ background: '#e0f2fe', border: '1px solid #bae6fd', color: '#0369a1', padding: '8px 16px', borderRadius: '12px', fontSize: '0.95rem', fontWeight: 'bold', display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
-                    <Droplets size={16} /> 對應 {currentSize} 尺寸規格
-                  </div>
-                </div>
-                <ul style={{ padding: 0, margin: 0, listStyle: 'none', color: '#475569', fontSize: '0.9rem', display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                  <li style={{ display: 'flex', alignItems: 'center', gap: '8px' }}><CheckSquare size={16} color="#10b981" /> 中性泡沫手洗</li>
-                  <li style={{ display: 'flex', alignItems: 'center', gap: '8px' }}><CheckSquare size={16} color="#10b981" /> 鋁圈深層清潔</li>
-                  <li style={{ display: 'flex', alignItems: 'center', gap: '8px' }}><CheckSquare size={16} color="#10b981" /> 玻璃除油膜 (前擋)</li>
-                  <li style={{ display: 'flex', alignItems: 'center', gap: '8px' }}><CheckSquare size={16} color="#10b981" /> 基礎內裝除塵</li>
-                </ul>
-              </div>
 
-              {/* 內裝深層 */}
-              <div className="glass-panel" style={{ padding: '25px', borderRadius: '24px', border: '1px solid #e2e8f0', background: '#fff' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '20px', color: '#6366f1' }}>
-                  <Wind size={24} />
-                  <h4 style={{ margin: 0, fontSize: '1.25rem', fontWeight: '800' }}>內裝深層護理</h4>
-                </div>
-                <div style={{ marginBottom: '20px' }}>
-                  <div style={{ background: '#f5f3ff', border: '1px solid #ddd6fe', color: '#5b21b6', padding: '8px 16px', borderRadius: '12px', fontSize: '0.95rem', fontWeight: 'bold', display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
-                    <Wind size={16} /> 對應 {currentSize} 尺寸規格
-                  </div>
-                </div>
-                <ul style={{ padding: 0, margin: 0, listStyle: 'none', color: '#475569', fontSize: '0.9rem', display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                  <li style={{ display: 'flex', alignItems: 'center', gap: '8px' }}><CheckSquare size={16} color="#10b981" /> 皮革滋養護理</li>
-                  <li style={{ display: 'flex', alignItems: 'center', gap: '8px' }}><CheckSquare size={16} color="#10b981" /> 高溫蒸氣殺菌</li>
-                  <li style={{ display: 'flex', alignItems: 'center', gap: '8px' }}><CheckSquare size={16} color="#10b981" /> 踏墊深層洗滌</li>
-                  <li style={{ display: 'flex', alignItems: 'center', gap: '8px' }}><CheckSquare size={16} color="#10b981" /> 內裝塑件上蠟</li>
-                </ul>
-              </div>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '25px', gridColumn: 'span 2' }}>
+                {detailingPrices.map((item, idx) => {
+                  const isExpanded = expandedDetailing === item.itemName;
+                  
+                  // Calculate size multiplier offset based on 'S'
+                  const sizes = ['XS', 'S', 'M', 'L', 'XL', '2XL', '3XL'];
+                  const sIndex = 1; // 'S' is index 1
+                  const currentIndex = sizes.indexOf(currentSize as string);
+                  const diff = currentIndex >= 0 ? currentIndex - sIndex : 0;
+                  
+                  // Calculate base price with offset
+                  const computedBase = item.basePriceN + (diff * item.stepPrice);
+                  
+                  // Calculate member prices
+                  const priceN = computedBase;
+                  const priceS = Math.round(computedBase * item.discountS);
+                  const priceSR = Math.round(computedBase * item.discountSR);
+                  const priceUR = Math.round(computedBase * item.discountUR);
 
-              {/* 小美容 */}
-              <div className="glass-panel" style={{ padding: '25px', borderRadius: '24px', border: '1px solid #e2e8f0', background: '#fff' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '20px', color: '#f59e0b' }}>
-                  <Sparkles size={24} />
-                  <h4 style={{ margin: 0, fontSize: '1.25rem', fontWeight: '800' }}>車體小美容 / 拋光</h4>
-                </div>
-                <div style={{ marginBottom: '20px' }}>
-                  <div style={{ background: '#fffbeb', border: '1px solid #fde68a', color: '#b45309', padding: '8px 16px', borderRadius: '12px', fontSize: '0.95rem', fontWeight: 'bold', display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
-                    <Sparkles size={16} /> 對應 {currentSize} 尺寸規格
-                  </div>
-                </div>
-                <ul style={{ padding: 0, margin: 0, listStyle: 'none', color: '#475569', fontSize: '0.9rem', display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                  <li style={{ display: 'flex', alignItems: 'center', gap: '8px' }}><CheckSquare size={16} color="#10b981" /> 單劑拋光增亮</li>
-                  <li style={{ display: 'flex', alignItems: 'center', gap: '8px' }}><CheckSquare size={16} color="#10b981" /> 柏油鐵粉去除</li>
-                  <li style={{ display: 'flex', alignItems: 'center', gap: '8px' }}><CheckSquare size={16} color="#10b981" /> 手作封體護理</li>
-                </ul>
-              </div>
-
-              {/* 大美容 */}
-              <div className="glass-panel" style={{ padding: '25px', borderRadius: '24px', border: '1px solid #e2e8f0', background: '#fff' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '20px', color: '#ef4444' }}>
-                  <ShieldCheck size={24} />
-                  <h4 style={{ margin: 0, fontSize: '1.25rem', fontWeight: '800' }}>極致大美容</h4>
-                </div>
-                <div style={{ marginBottom: '20px' }}>
-                  <div style={{ background: '#fef2f2', border: '1px solid #fecaca', color: '#b91c1c', padding: '8px 16px', borderRadius: '12px', fontSize: '0.95rem', fontWeight: 'bold', display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
-                    <ShieldCheck size={16} /> 對應 {currentSize} 尺寸規格
-                  </div>
-                </div>
-                <ul style={{ padding: 0, margin: 0, listStyle: 'none', color: '#475569', fontSize: '0.9rem', display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                  <li style={{ display: 'flex', alignItems: 'center', gap: '8px' }}><CheckSquare size={16} color="#10b981" /> 多劑式漆面修正</li>
-                  <li style={{ display: 'flex', alignItems: 'center', gap: '8px' }}><CheckSquare size={16} color="#10b981" /> 玻璃全車拋光</li>
-                  <li style={{ display: 'flex', alignItems: 'center', gap: '8px' }}><CheckSquare size={16} color="#10b981" /> 引擎室清潔護理</li>
-                </ul>
-              </div>
-
-              {/* 石英鍍膜 */}
-              <div className="glass-panel" style={{ padding: '25px', borderRadius: '24px', border: '1px solid #e2e8f0', background: 'linear-gradient(to bottom right, #fff, #f0f9ff)', gridColumn: 'span 2' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '20px', color: '#8b5cf6' }}>
-                  <Gem size={24} />
-                  <h4 style={{ margin: 0, fontSize: '1.25rem', fontWeight: '800' }}>頂級石英鍍膜方案 (一年期/兩年期)</h4>
-                </div>
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '40px' }}>
-                  <div>
-                    <p style={{ fontSize: '0.9rem', color: '#64748b', lineHeight: '1.6', marginBottom: '20px' }}>
-                      使用歐美頂級鍍膜藥劑，提供極致潑水與漆面硬度提升，有效防止酸雨、跳石與紫外線傷害。
-                    </p>
-                    <div style={{ background: '#f5f3ff', padding: '15px', borderRadius: '12px', border: '1px solid #ddd6fe' }}>
-                      <div style={{ fontWeight: 'bold', color: '#5b21b6', marginBottom: '8px' }}>包含項目：</div>
-                      <div style={{ fontSize: '0.85rem', color: '#7c3aed', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px' }}>
-                        <span>• 全車漆面鍍膜</span>
-                        <span>• 玻璃撥水鍍膜</span>
-                        <span>• 鋁圈耐高溫鍍膜</span>
-                        <span>• 塑件還原鍍膜</span>
+                  return (
+                    <div key={idx} className="glass-panel" style={{ padding: '20px', borderRadius: '24px', border: '1px solid #e2e8f0', background: '#fff', display: 'flex', flexDirection: 'column' }}>
+                      <div 
+                        style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', cursor: 'pointer' }}
+                        onClick={() => setExpandedDetailing(isExpanded ? null : item.itemName)}
+                      >
+                        <div style={{ flex: 1 }}>
+                          <h4 style={{ margin: 0, fontSize: '1.25rem', fontWeight: '800', color: '#0ea5e9', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                            <Sparkles size={20} /> {item.itemName}
+                          </h4>
+                          <div style={{ fontSize: '0.85rem', color: '#64748b', marginTop: '6px', fontWeight: 'bold' }}>
+                            {item.subtitle}
+                          </div>
+                        </div>
+                        <div style={{ textAlign: 'right', display: 'flex', flexDirection: 'column', alignItems: 'flex-end' }}>
+                          <div style={{ background: '#f8fafc', padding: '4px 10px', borderRadius: '12px', fontSize: '1.1rem', fontWeight: '900', color: '#0f172a', border: '1px solid #e2e8f0' }}>
+                            $ {priceN.toLocaleString()}
+                          </div>
+                          <div style={{ color: '#94a3b8', marginTop: '6px' }}>
+                            {isExpanded ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
+                          </div>
+                        </div>
                       </div>
+
+                      {isExpanded && (
+                        <div style={{ marginTop: '20px', paddingTop: '20px', borderTop: '1px dashed #e2e8f0', animation: 'fadeIn 0.3s ease-out' }}>
+                          <div style={{ background: '#f0f9ff', padding: '15px', borderRadius: '12px', marginBottom: '20px', border: '1px solid #e0f2fe' }}>
+                            <div style={{ fontSize: '0.9rem', color: '#0369a1', fontWeight: 'bold', marginBottom: '10px' }}>會員專屬報價 (已包含尺寸加價)</div>
+                            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '10px', textAlign: 'center' }}>
+                              <div style={{ background: '#fff', padding: '8px', borderRadius: '8px', border: '1px solid #e2e8f0' }}>
+                                <div style={{ fontSize: '0.7rem', color: '#64748b', fontWeight: 'bold' }}>一般 (N)</div>
+                                <div style={{ fontSize: '0.9rem', color: '#0f172a', fontWeight: '900' }}>${priceN.toLocaleString()}</div>
+                              </div>
+                              <div style={{ background: '#f8fafc', padding: '8px', borderRadius: '8px', border: '1px solid #cbd5e1' }}>
+                                <div style={{ fontSize: '0.7rem', color: '#475569', fontWeight: 'bold' }}>銀卡 (S)</div>
+                                <div style={{ fontSize: '0.9rem', color: '#334155', fontWeight: '900' }}>${priceS.toLocaleString()}</div>
+                              </div>
+                              <div style={{ background: '#fffbeb', padding: '8px', borderRadius: '8px', border: '1px solid #fde68a' }}>
+                                <div style={{ fontSize: '0.7rem', color: '#b45309', fontWeight: 'bold' }}>金卡 (SR)</div>
+                                <div style={{ fontSize: '0.9rem', color: '#92400e', fontWeight: '900' }}>${priceSR.toLocaleString()}</div>
+                              </div>
+                              <div style={{ background: '#fdf4ff', padding: '8px', borderRadius: '8px', border: '1px solid #fbcfe8' }}>
+                                <div style={{ fontSize: '0.7rem', color: '#c026d3', fontWeight: 'bold' }}>黑卡 (UR)</div>
+                                <div style={{ fontSize: '0.9rem', color: '#a21caf', fontWeight: '900' }}>${priceUR.toLocaleString()}</div>
+                              </div>
+                            </div>
+                          </div>
+
+                          <div style={{ fontSize: '0.85rem', color: '#475569', lineHeight: '1.6', whiteSpace: 'pre-wrap' }}>
+                            {item.details ? item.details : <span style={{ opacity: 0.5 }}>無詳細說明</span>}
+                          </div>
+                        </div>
+                      )}
                     </div>
-                  </div>
-                  <div style={{ textAlign: 'right', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'flex-end' }}>
-                    <div style={{ background: '#f3e8ff', border: '1px solid #e9d5ff', color: '#6b21a8', padding: '8px 16px', borderRadius: '12px', fontSize: '0.95rem', fontWeight: 'bold', display: 'inline-flex', alignItems: 'center', gap: '6px', marginBottom: '10px' }}>
-                      <Gem size={16} /> 對應 {currentSize} 尺寸規格
-                    </div>
-                    <div style={{ fontSize: '0.85rem', color: '#6b21a8', fontWeight: 'bold', opacity: 0.8 }}>
-                      * 實際施工價格與加購項目請洽現場人員
-                    </div>
-                  </div>
-                </div>
+                  );
+                })}
               </div>
 
               {/* 溫馨提醒聲明 */}
