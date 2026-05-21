@@ -394,17 +394,19 @@ export const PriceInquiryPage: React.FC<PriceInquiryPageProps> = ({ vehicleMaste
 
               <div style={{ display: 'flex', flexDirection: 'column', gap: '40px', gridColumn: 'span 2' }}>
                 {[
-                  { title: "保養洗車、基本護理", items: detailingPrices.filter(i => ["經典洗", "光澤整備", "深層特勤", "鏡透打底Lv.1", "鏡透打底Lv.2", "視界去污"].includes(i.itemName)) },
-                  { title: "拋光鍍膜", items: detailingPrices.filter(i => ["S1單層護盾", "S1雙層護盾", "S2單層護盾", "S2雙層護盾", "視界強化", "鋁圈守護"].includes(i.itemName)) },
-                  { title: "貼膜車專屬方案", items: detailingPrices.filter(i => ["膜淨行動", "膜車專護方案"].includes(i.itemName)) }
-                ].map((group, gIdx) => (
+                  { title: "保養洗車、基本護理", icon: Droplets, theme: { main: '#0ea5e9', bg: '#f0f9ff', border: '#e0f2fe' }, items: detailingPrices.filter(i => ["經典洗", "光澤整備", "深層特勤", "鏡透打底Lv.1", "鏡透打底Lv.2", "視界去污"].includes(i.itemName)) },
+                  { title: "拋光鍍膜", icon: Sparkles, theme: { main: '#8b5cf6', bg: '#f5f3ff', border: '#ede9fe' }, items: detailingPrices.filter(i => ["S1單層護盾", "S1雙層護盾", "S2單層護盾", "S2雙層護盾", "視界強化", "鋁圈守護"].includes(i.itemName)) },
+                  { title: "貼膜車專屬方案", icon: ShieldCheck, theme: { main: '#10b981', bg: '#ecfdf5', border: '#d1fae5' }, items: detailingPrices.filter(i => ["膜淨行動", "膜車專護方案"].includes(i.itemName)) }
+                ].map((group, gIdx) => {
+                  const GroupIcon = group.icon;
+                  return (
                   <div key={gIdx}>
                     <h3 style={{ fontSize: '1.4rem', color: '#1e293b', marginBottom: '20px', paddingBottom: '10px', display: 'flex', alignItems: 'center', gap: '10px' }}>
-                      <Sparkles size={24} color="#0ea5e9" /> {group.title}
+                      <GroupIcon size={24} color={group.theme.main} /> {group.title}
                     </h3>
                     <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '25px' }}>
                       {group.items.map((item, idx) => {
-                        const isExpanded = expandedDetailing.includes(item.itemName);
+                        const isExpanded = expandedDetailing.includes(group.title);
                         
                         // Calculate size multiplier offset based on 'S'
                   const sizes = ['XS', 'S', 'M', 'L', 'XL', '2XL', '3XL'];
@@ -425,11 +427,11 @@ export const PriceInquiryPage: React.FC<PriceInquiryPageProps> = ({ vehicleMaste
                     <div key={idx} className="glass-panel" style={{ padding: '20px', borderRadius: '24px', border: '1px solid #e2e8f0', background: '#fff', display: 'flex', flexDirection: 'column' }}>
                       <div 
                         style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', cursor: 'pointer' }}
-                        onClick={() => setExpandedDetailing(prev => prev.includes(item.itemName) ? prev.filter(i => i !== item.itemName) : [...prev, item.itemName])}
+                        onClick={() => setExpandedDetailing(prev => prev.includes(group.title) ? prev.filter(i => i !== group.title) : [...prev, group.title])}
                       >
                         <div style={{ flex: 1 }}>
-                          <h4 style={{ margin: 0, fontSize: '1.25rem', fontWeight: '800', color: '#0ea5e9', display: 'flex', alignItems: 'center', gap: '8px' }}>
-                            <Sparkles size={20} /> {item.itemName}
+                          <h4 style={{ margin: 0, fontSize: '1.25rem', fontWeight: '800', color: group.theme.main, display: 'flex', alignItems: 'center', gap: '8px' }}>
+                            <GroupIcon size={20} /> {item.itemName}
                           </h4>
                           <div style={{ fontSize: '0.85rem', color: '#64748b', marginTop: '6px', fontWeight: 'bold' }}>
                             {item.subtitle}
@@ -447,8 +449,8 @@ export const PriceInquiryPage: React.FC<PriceInquiryPageProps> = ({ vehicleMaste
 
                       {isExpanded && (
                         <div style={{ marginTop: '20px', paddingTop: '20px', borderTop: '1px dashed #e2e8f0', animation: 'fadeIn 0.3s ease-out' }}>
-                          <div style={{ background: '#f0f9ff', padding: '15px', borderRadius: '12px', marginBottom: '20px', border: '1px solid #e0f2fe' }}>
-                            <div style={{ fontSize: '0.9rem', color: '#0369a1', fontWeight: 'bold', marginBottom: '10px' }}>會員專屬報價 (已包含尺寸加價)</div>
+                          <div style={{ background: group.theme.bg, padding: '15px', borderRadius: '12px', marginBottom: '20px', border: `1px solid ${group.theme.border}` }}>
+                            <div style={{ fontSize: '0.9rem', color: group.theme.main, fontWeight: 'bold', marginBottom: '10px' }}>會員專屬報價 (已包含尺寸加價)</div>
                             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '10px', textAlign: 'center' }}>
                               <div style={{ background: '#fff', padding: '8px', borderRadius: '8px', border: '1px solid #e2e8f0' }}>
                                 <div style={{ fontSize: '0.7rem', color: '#64748b', fontWeight: 'bold' }}>一般 (N)</div>
@@ -479,7 +481,8 @@ export const PriceInquiryPage: React.FC<PriceInquiryPageProps> = ({ vehicleMaste
                 })}
                     </div>
                   </div>
-                ))}
+                );
+              })}
               </div>
 
               {/* 溫馨提示區 */}
