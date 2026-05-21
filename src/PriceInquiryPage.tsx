@@ -152,7 +152,7 @@ export const PriceInquiryPage: React.FC<PriceInquiryPageProps> = ({ vehicleMaste
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedVehicle, setSelectedVehicle] = useState<Vehicle | null>(null);
   const [activeCategory, setActiveCategory] = useState<'detailing' | 'film'>(initialMode || 'detailing');
-  const [expandedDetailing, setExpandedDetailing] = useState<string | null>(null);
+  const [expandedDetailing, setExpandedDetailing] = useState<string[]>([]);
 
   // 直接使用內建的 vehiclesData
   const fullMaster = useMemo(() => {
@@ -392,11 +392,21 @@ export const PriceInquiryPage: React.FC<PriceInquiryPageProps> = ({ vehicleMaste
             /* 汽車美容報價內容 */
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '25px' }}>
 
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '25px', gridColumn: 'span 2' }}>
-                {detailingPrices.map((item, idx) => {
-                  const isExpanded = expandedDetailing === item.itemName;
-                  
-                  // Calculate size multiplier offset based on 'S'
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '40px', gridColumn: 'span 2' }}>
+                {[
+                  { title: "保養洗車、基本護理", items: detailingPrices.filter(i => ["經典洗", "光澤整備", "深層特勤", "鏡透打底Lv.1", "鏡透打底Lv.2", "視界去污"].includes(i.itemName)) },
+                  { title: "拋光鍍膜", items: detailingPrices.filter(i => ["S1單層護盾", "S1雙層護盾", "S2單層護盾", "S2雙層護盾", "視界強化", "鋁圈守護"].includes(i.itemName)) },
+                  { title: "貼膜車專屬方案", items: detailingPrices.filter(i => ["膜淨行動", "膜車專護方案"].includes(i.itemName)) }
+                ].map((group, gIdx) => (
+                  <div key={gIdx}>
+                    <h3 style={{ fontSize: '1.4rem', color: '#1e293b', marginBottom: '20px', paddingBottom: '10px', display: 'flex', alignItems: 'center', gap: '10px' }}>
+                      <Sparkles size={24} color="#0ea5e9" /> {group.title}
+                    </h3>
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '25px' }}>
+                      {group.items.map((item, idx) => {
+                        const isExpanded = expandedDetailing.includes(item.itemName);
+                        
+                        // Calculate size multiplier offset based on 'S'
                   const sizes = ['XS', 'S', 'M', 'L', 'XL', '2XL', '3XL'];
                   const sIndex = 1; // 'S' is index 1
                   const currentIndex = sizes.indexOf(currentSize as string);
@@ -415,7 +425,7 @@ export const PriceInquiryPage: React.FC<PriceInquiryPageProps> = ({ vehicleMaste
                     <div key={idx} className="glass-panel" style={{ padding: '20px', borderRadius: '24px', border: '1px solid #e2e8f0', background: '#fff', display: 'flex', flexDirection: 'column' }}>
                       <div 
                         style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', cursor: 'pointer' }}
-                        onClick={() => setExpandedDetailing(isExpanded ? null : item.itemName)}
+                        onClick={() => setExpandedDetailing(prev => prev.includes(item.itemName) ? prev.filter(i => i !== item.itemName) : [...prev, item.itemName])}
                       >
                         <div style={{ flex: 1 }}>
                           <h4 style={{ margin: 0, fontSize: '1.25rem', fontWeight: '800', color: '#0ea5e9', display: 'flex', alignItems: 'center', gap: '8px' }}>
@@ -467,9 +477,12 @@ export const PriceInquiryPage: React.FC<PriceInquiryPageProps> = ({ vehicleMaste
                     </div>
                   );
                 })}
+                    </div>
+                  </div>
+                ))}
               </div>
 
-              {/* 溫馨提醒聲明 */}
+              {/* 溫馨提示區 */}
               <div className="glass-panel col-span-2" style={{ padding: '15px 20px', borderRadius: '16px', background: '#f8fafc', border: '1px solid #e2e8f0', display: 'flex', alignItems: 'center', gap: '10px', gridColumn: 'span 2' }}>
                 <Info size={18} color="#0ea5e9" />
                 <span style={{ fontSize: '0.85rem', color: '#64748b', fontWeight: '500' }}>
