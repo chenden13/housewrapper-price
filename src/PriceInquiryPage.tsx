@@ -160,13 +160,24 @@ export const PriceInquiryPage: React.FC<PriceInquiryPageProps> = ({ vehicleMaste
   }, []);
 
   const filteredVehicles = useMemo(() => {
-    const term = (searchTerm || '').trim().toLowerCase();
-    if (!term) return [];
+    const raw = (searchTerm || '').trim().toLowerCase();
+    if (!raw) return [];
+    // normalize: remove hyphens, spaces, underscores for fuzzy matching
+    const normalize = (s: string) => s.toLowerCase().replace(/[-\s_]/g, '');
+    const term = normalize(raw);
     
-    return fullMaster.filter(v => 
-      v.brand.toLowerCase().includes(term) || 
-      v.model.toLowerCase().includes(term)
-    ).slice(0, 15);
+    return fullMaster.filter(v => {
+      const brand = v.brand.toLowerCase();
+      const model = v.model.toLowerCase();
+      const combined = `${brand} ${model}`.toLowerCase();
+      // standard includes check
+      if (brand.includes(raw) || model.includes(raw) || combined.includes(raw)) return true;
+      // normalized fuzzy check (handles CR-V → CRV, MODEL Y → MODELY)
+      const nBrand = normalize(v.brand);
+      const nModel = normalize(v.model);
+      const nCombined = `${nBrand}${nModel}`;
+      return nBrand.includes(term) || nModel.includes(term) || nCombined.includes(term);
+    }).slice(0, 15);
   }, [searchTerm, fullMaster]);
 
   const handleSelect = (v: any) => {
