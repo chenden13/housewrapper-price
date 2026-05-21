@@ -44,7 +44,7 @@ function App() {
 
       {/* 內容區塊 */}
       <main style={{ flex: 1, padding: '20px 0' }}>
-        <PriceInquiryPage vehicleMaster={[]} initialMode="film" />
+        <PriceInquiryPage vehicleMaster={[]} />
       </main>
 
       {/* 底部資訊 */}
