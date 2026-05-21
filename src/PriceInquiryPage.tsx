@@ -195,7 +195,7 @@ export const PriceInquiryPage: React.FC<PriceInquiryPageProps> = ({ vehicleMaste
           {activeCategory === 'detailing' ? (
             <><Sparkles size={32} color="#fb923c" /> 汽車美容報價查詢</>
           ) : (
-            <><Palette size={32} color="#4f46e5" /> 貼膜施工報價查詢</>
+            <><Palette size={32} color="#fb923c" /> 貼膜施工報價查詢</>
           )}
         </h2>
         <p style={{ color: '#64748b', fontSize: '1rem' }}>輸入車型即可自動對應尺寸並查看各項服務建議售價</p>
@@ -273,7 +273,7 @@ export const PriceInquiryPage: React.FC<PriceInquiryPageProps> = ({ vehicleMaste
                       <span style={{ marginLeft: '10px', color: '#64748b' }}>{v.model}</span>
                     </div>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                      <span style={{ background: '#e0e7ff', color: '#4f46e5', fontSize: '0.75rem', padding: '4px 8px', borderRadius: '6px', fontWeight: 'bold' }}>
+                      <span style={{ background: '#e0e7ff', color: '#fb923c', fontSize: '0.75rem', padding: '4px 8px', borderRadius: '6px', fontWeight: 'bold' }}>
                         貼膜: {v.size || 'M'}
                       </span>
                       <span style={{ background: '#e0f2fe', color: '#fb923c', fontSize: '0.75rem', padding: '4px 8px', borderRadius: '6px', fontWeight: 'bold' }}>
@@ -301,9 +301,9 @@ export const PriceInquiryPage: React.FC<PriceInquiryPageProps> = ({ vehicleMaste
           display: 'flex', 
           justifyContent: 'center', 
           background: '#f1f5f9', 
-          padding: '6px', 
-          borderRadius: '16px', 
-          maxWidth: '400px', 
+          padding: '8px', 
+          borderRadius: '20px', 
+          maxWidth: '560px', 
           margin: '0 auto 40px auto',
           boxShadow: 'inset 0 2px 4px rgba(0,0,0,0.05)'
         }}>
@@ -311,43 +311,45 @@ export const PriceInquiryPage: React.FC<PriceInquiryPageProps> = ({ vehicleMaste
             onClick={() => setActiveCategory('detailing')}
             style={{ 
               flex: 1,
-              padding: '12px', 
-              borderRadius: '12px', 
+              padding: '18px 24px', 
+              borderRadius: '14px', 
               border: 'none', 
               cursor: 'pointer',
-              fontWeight: 'bold',
+              fontWeight: '900',
+              fontSize: '1.1rem',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              gap: '8px',
+              gap: '10px',
               background: activeCategory === 'detailing' ? '#fff' : 'transparent',
-              color: activeCategory === 'detailing' ? '#fb923c' : '#64748b',
-              boxShadow: activeCategory === 'detailing' ? '0 4px 6px -1px rgba(0, 0, 0, 0.1)' : 'none',
-              transition: 'all 0.2s'
+              color: activeCategory === 'detailing' ? '#fb923c' : '#94a3b8',
+              boxShadow: activeCategory === 'detailing' ? '0 4px 12px rgba(251,146,60,0.25)' : 'none',
+              transition: 'all 0.25s'
             }}
           >
-            <Sparkles size={18} /> 汽車美容
+            <Sparkles size={22} /> 汽車美容
           </button>
           <button 
             onClick={() => setActiveCategory('film')}
             style={{ 
               flex: 1,
-              padding: '12px', 
-              borderRadius: '12px', 
+              padding: '18px 24px', 
+              borderRadius: '14px', 
               border: 'none', 
               cursor: 'pointer',
-              fontWeight: 'bold',
+              fontWeight: '900',
+              fontSize: '1.1rem',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              gap: '8px',
+              gap: '10px',
               background: activeCategory === 'film' ? '#fff' : 'transparent',
-              color: activeCategory === 'film' ? '#4f46e5' : '#64748b',
-              boxShadow: activeCategory === 'film' ? '0 4px 6px -1px rgba(0, 0, 0, 0.1)' : 'none',
-              transition: 'all 0.2s'
+              color: activeCategory === 'film' ? '#fb923c' : '#94a3b8',
+              boxShadow: activeCategory === 'film' ? '0 4px 12px rgba(251,146,60,0.25)' : 'none',
+              transition: 'all 0.25s'
             }}
           >
-            <Palette size={18} /> 貼膜服務
+            <Palette size={22} /> 貼膜服務
           </button>
         </div>
       )}
@@ -362,7 +364,7 @@ export const PriceInquiryPage: React.FC<PriceInquiryPageProps> = ({ vehicleMaste
             marginBottom: '30px', 
             background: activeCategory === 'detailing' 
               ? 'linear-gradient(135deg, #fb923c 0%, #c2410c 100%)' 
-              : 'linear-gradient(135deg, #4f46e5 0%, #4338ca 100%)', 
+              : 'linear-gradient(135deg, #fb923c 0%, #c2410c 100%)', 
             padding: '25px 30px', 
             borderRadius: '24px', 
             color: '#fff', 
@@ -395,7 +397,7 @@ export const PriceInquiryPage: React.FC<PriceInquiryPageProps> = ({ vehicleMaste
               <div style={{ display: 'flex', flexDirection: 'column', gap: '40px', gridColumn: 'span 2' }}>
                 {[
                   { title: "保養洗車、基本護理", icon: Droplets, theme: { main: '#fb923c', bg: '#f0f9ff', border: '#e0f2fe' }, items: detailingPrices.filter(i => ["經典洗", "光澤整備", "深層特勤", "鏡透打底Lv.1", "鏡透打底Lv.2", "視界去污"].includes(i.itemName)) },
-                  { title: "拋光鍍膜", icon: Sparkles, theme: { main: '#8b5cf6', bg: '#f5f3ff', border: '#ede9fe' }, items: detailingPrices.filter(i => ["S1單層護盾", "S1雙層護盾", "S2單層護盾", "S2雙層護盾", "視界強化", "鋁圈守護"].includes(i.itemName)) },
+                  { title: "拋光鍍膜", icon: Sparkles, theme: { main: '#8b5cf6', bg: '#fff7ed', border: '#ffedd5' }, items: detailingPrices.filter(i => ["S1單層護盾", "S1雙層護盾", "S2單層護盾", "S2雙層護盾", "視界強化", "鋁圈守護"].includes(i.itemName)) },
                   { title: "貼膜車專屬方案", icon: ShieldCheck, theme: { main: '#10b981', bg: '#ecfdf5', border: '#d1fae5' }, items: detailingPrices.filter(i => ["膜淨行動", "膜車專護方案"].includes(i.itemName)) }
                 ].map((group, gIdx) => {
                   const GroupIcon = group.icon;
@@ -499,7 +501,7 @@ export const PriceInquiryPage: React.FC<PriceInquiryPageProps> = ({ vehicleMaste
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '25px' }}>
             {/* 改色膜 */}
             <div className="glass-panel" style={{ padding: '25px', borderRadius: '20px', border: '1px solid #e2e8f0', gridColumn: 'span 2' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '20px', color: '#4f46e5' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '20px', color: '#fb923c' }}>
                 <Palette size={24} />
                 <h4 style={{ margin: 0, fontSize: '1.2rem', fontWeight: '800' }}>全車改色膜 - 品牌系列報價</h4>
               </div>
@@ -508,7 +510,7 @@ export const PriceInquiryPage: React.FC<PriceInquiryPageProps> = ({ vehicleMaste
                 {/* AX Series */}
                 <div>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '15px' }}>
-                    <div style={{ background: '#4f46e5', color: '#fff', padding: '2px 8px', borderRadius: '4px', fontSize: '0.8rem', fontWeight: 'bold' }}>AX</div>
+                    <div style={{ background: '#fb923c', color: '#fff', padding: '2px 8px', borderRadius: '4px', fontSize: '0.8rem', fontWeight: 'bold' }}>AX</div>
                     <span style={{ fontWeight: 'bold', color: '#1e293b' }}>AX 品牌系列</span>
                   </div>
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
@@ -544,18 +546,18 @@ export const PriceInquiryPage: React.FC<PriceInquiryPageProps> = ({ vehicleMaste
                 </div>
               </div>
 
-              <div style={{ marginTop: '25px', padding: '15px 20px', background: '#f5f3ff', borderRadius: '15px', border: '1px solid #ddd6fe' }}>
+              <div style={{ marginTop: '25px', padding: '15px 20px', background: '#fff7ed', borderRadius: '15px', border: '1px solid #ffedd5' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                    <div style={{ background: '#7c3aed', color: '#fff', padding: '6px', borderRadius: '10px' }}>
+                    <div style={{ background: '#f97316', color: '#fff', padding: '6px', borderRadius: '10px' }}>
                       <ShieldCheck size={20} />
                     </div>
                     <div>
-                      <div style={{ fontWeight: 'bold', color: '#5b21b6', fontSize: '0.95rem' }}>全車改色加購 - 迎風面犀牛皮</div>
-                      <div style={{ fontSize: '0.75rem', color: '#7c3aed' }}>品牌: Pixel8bit (Hood+Fender)</div>
+                      <div style={{ fontWeight: 'bold', color: '#c2410c', fontSize: '0.95rem' }}>全車改色加購 - 迎風面犀牛皮</div>
+                      <div style={{ fontSize: '0.75rem', color: '#f97316' }}>品牌: Pixel8bit (Hood+Fender)</div>
                     </div>
                   </div>
-                  <div style={{ fontSize: '1.2rem', fontWeight: '900', color: '#5b21b6' }}>
+                  <div style={{ fontSize: '1.2rem', fontWeight: '900', color: '#c2410c' }}>
                     <span style={{ fontSize: '0.8rem', marginRight: '3px' }}>+ $</span>18,000
                   </div>
                 </div>
@@ -606,22 +608,22 @@ export const PriceInquiryPage: React.FC<PriceInquiryPageProps> = ({ vehicleMaste
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
                     {Object.entries(FRONT_PPF_PRICING).map(([name, base]) => (
                       <div key={name} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '12px 15px', background: '#f0f9ff', borderRadius: '10px', border: '1px solid #e0f2fe' }}>
-                        <span style={{ fontSize: '0.9rem', color: '#0369a1', fontWeight: '600' }}>{name}</span>
-                        <span style={{ fontSize: '1.1rem', fontWeight: '800', color: '#0c4a6e' }}>
+                        <span style={{ fontSize: '0.9rem', color: '#f97316', fontWeight: '600' }}>{name}</span>
+                        <span style={{ fontSize: '1.1rem', fontWeight: '800', color: '#c2410c' }}>
                           ${calculateFrontPpfPrice(base, selectedVehicle.size).toLocaleString()}
                         </span>
                       </div>
                     ))}
                   </div>
                   <div style={{ marginTop: '20px', padding: '15px', background: '#f8fafc', borderRadius: '12px', border: '1px solid #e2e8f0' }}>
-                    <div style={{ fontSize: '0.8rem', color: '#0369a1', fontWeight: 'bold', marginBottom: '10px', display: 'flex', alignItems: 'center', gap: '5px' }}>
+                    <div style={{ fontSize: '0.8rem', color: '#f97316', fontWeight: 'bold', marginBottom: '10px', display: 'flex', alignItems: 'center', gap: '5px' }}>
                       <Zap size={14} /> 迎風面加購 - 後半車鍍膜
                     </div>
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
                       {Object.entries(REAR_COATING_PRICING).map(([name, base]) => (
                         <div key={name} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '8px 12px', background: '#fff', borderRadius: '8px', border: '1px solid #e2e8f0' }}>
                           <span style={{ fontSize: '0.8rem', color: '#475569', fontWeight: '600' }}>{name}</span>
-                          <span style={{ fontSize: '0.9rem', fontWeight: '800', color: '#0369a1' }}>
+                          <span style={{ fontSize: '0.9rem', fontWeight: '800', color: '#f97316' }}>
                             +${calculateRearCoatingPrice(base, selectedVehicle.size).toLocaleString()}
                           </span>
                         </div>
@@ -641,7 +643,7 @@ export const PriceInquiryPage: React.FC<PriceInquiryPageProps> = ({ vehicleMaste
           <div style={{ marginTop: '30px', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '25px' }}>
              {/* 隔熱紙方案 */}
              <div className="glass-panel" style={{ padding: '25px', borderRadius: '20px', border: '1px solid #e2e8f0', gridColumn: 'span 2' }}>
-                <h4 style={{ marginBottom: '20px', color: '#1e3a8a', fontWeight: '800', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <h4 style={{ marginBottom: '20px', color: '#c2410c', fontWeight: '800', display: 'flex', alignItems: 'center', gap: '8px' }}>
                   <Sun size={20} /> 隔熱紙專業方案
                 </h4>
                 
@@ -649,7 +651,7 @@ export const PriceInquiryPage: React.FC<PriceInquiryPageProps> = ({ vehicleMaste
                   <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '20px' }}>
                     {Object.entries(TINT_GROUPS).map(([group, items]) => (
                       <div key={group} style={{ background: '#f8fafc', padding: '15px', borderRadius: '15px', border: '1px solid #e2e8f0' }}>
-                        <div style={{ fontWeight: 'bold', color: '#1e3a8a', fontSize: '0.9rem', marginBottom: '10px', borderBottom: '1px solid #e2e8f0', paddingBottom: '5px' }}>{group}</div>
+                        <div style={{ fontWeight: 'bold', color: '#c2410c', fontSize: '0.9rem', marginBottom: '10px', borderBottom: '1px solid #e2e8f0', paddingBottom: '5px' }}>{group}</div>
                         <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
                           {items.map(item => {
                             const prices = TINT_PRICE_TABLE[item];
@@ -661,7 +663,7 @@ export const PriceInquiryPage: React.FC<PriceInquiryPageProps> = ({ vehicleMaste
                               <div key={item} style={{ fontSize: '0.85rem' }}>
                                 <div style={{ display: 'flex', justifyContent: 'space-between', color: '#475569', fontWeight: '600' }}>
                                   <span>{item}</span>
-                                  <span style={{ color: '#1e3a8a' }}>${price.toLocaleString()}</span>
+                                  <span style={{ color: '#c2410c' }}>${price.toLocaleString()}</span>
                                 </div>
                                 <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.75rem', color: '#94a3b8', marginTop: '2px' }}>
                                   <span>(含天窗方案)</span>
@@ -675,11 +677,11 @@ export const PriceInquiryPage: React.FC<PriceInquiryPageProps> = ({ vehicleMaste
                     ))}
                   </div>
                 ) : (
-                  <div style={{ background: '#eff6ff', padding: '20px', borderRadius: '15px', border: '1px dashed #3b82f6', textAlign: 'center' }}>
-                     <p style={{ color: '#1e40af', fontWeight: 'bold', margin: 0 }}>
+                  <div style={{ background: '#fff7ed', padding: '20px', borderRadius: '15px', border: '1px dashed #fb923c', textAlign: 'center' }}>
+                     <p style={{ color: '#c2410c', fontWeight: 'bold', margin: 0 }}>
                        最低 $ {pricing?.tint} 起
                      </p>
-                     <p style={{ color: '#60a5fa', fontSize: '0.85rem', margin: '5px 0 0 0' }}>
+                     <p style={{ color: '#fba56a', fontSize: '0.85rem', margin: '5px 0 0 0' }}>
                        (依車型不同須詢問隔熱紙廠商實際報價)
                      </p>
                   </div>
@@ -703,7 +705,7 @@ export const PriceInquiryPage: React.FC<PriceInquiryPageProps> = ({ vehicleMaste
                           <div key={m.model} style={{ background: '#f8fafc', padding: '12px 15px', borderRadius: '12px', border: '1px solid #f1f5f9' }}>
                             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                               <span style={{ fontWeight: '700', color: '#1e293b' }}>{m.brand} {m.model}</span>
-                              <span style={{ fontWeight: '800', color: '#2563eb' }}>${m.price.toLocaleString()}</span>
+                              <span style={{ fontWeight: '800', color: '#fb923c' }}>${m.price.toLocaleString()}</span>
                             </div>
                             {m.note && <div style={{ fontSize: '0.75rem', color: '#94a3b8', marginTop: '4px' }}>{m.note}</div>}
                           </div>
@@ -719,7 +721,7 @@ export const PriceInquiryPage: React.FC<PriceInquiryPageProps> = ({ vehicleMaste
                           <div key={m.model} style={{ background: '#f8fafc', padding: '12px 15px', borderRadius: '12px', border: '1px solid #f1f5f9' }}>
                             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                               <span style={{ fontWeight: '700', color: '#1e293b' }}>{m.brand} {m.model}</span>
-                              <span style={{ fontWeight: '800', color: '#2563eb' }}>${m.price.toLocaleString()}</span>
+                              <span style={{ fontWeight: '800', color: '#fb923c' }}>${m.price.toLocaleString()}</span>
                             </div>
                             {m.note && <div style={{ fontSize: '0.75rem', color: '#94a3b8', marginTop: '4px' }}>{m.note}</div>}
                           </div>
