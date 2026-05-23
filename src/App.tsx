@@ -1,8 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { PriceInquiryPage } from './PriceInquiryPage';
-import { ShieldCheck } from 'lucide-react';
+import { AxColorPage } from './AxColorPage';
+import { ShieldCheck, Palette, LayoutDashboard } from 'lucide-react';
 
 function App() {
+  const [view, setView] = useState<'main' | 'axColor'>('main');
+
   return (
     <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
       {/* 頂部導航列 / 品牌標識 */}
@@ -16,13 +19,41 @@ function App() {
         position: 'sticky',
         top: 0,
         zIndex: 100,
-        boxShadow: '0 4px 6px -1px rgba(251, 146, 60, 0.1)'
+        boxShadow: '0 4px 6px -1px rgba(251, 146, 60, 0.1)',
+        flexWrap: 'wrap',
+        gap: '15px'
       }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
           <img src="./logo.jpg" alt="好室多膜 LOGO" style={{ width: '60px', height: 'auto', borderRadius: '8px' }} />
           <div>
             <h1 style={{ margin: 0, fontSize: '1.6rem', fontWeight: '900', color: '#fb923c' }}>好室多膜</h1>
             <div style={{ fontSize: '0.9rem', color: '#fb923c', fontWeight: 'bold', letterSpacing: '2px' }}>HOUSE WRAPPER</div>
+          </div>
+          <div style={{ display: 'flex', gap: '10px', marginLeft: '20px' }}>
+            <button
+              onClick={() => setView('main')}
+              style={{
+                display: 'flex', alignItems: 'center', gap: '6px',
+                padding: '8px 16px', borderRadius: '12px', border: 'none', cursor: 'pointer',
+                fontWeight: 'bold', fontSize: '0.95rem', transition: 'all 0.2s',
+                background: view === 'main' ? '#fb923c' : '#f1f5f9',
+                color: view === 'main' ? '#fff' : '#64748b'
+              }}
+            >
+              <LayoutDashboard size={18} /> 主查詢系統
+            </button>
+            <button
+              onClick={() => setView('axColor')}
+              style={{
+                display: 'flex', alignItems: 'center', gap: '6px',
+                padding: '8px 16px', borderRadius: '12px', border: 'none', cursor: 'pointer',
+                fontWeight: 'bold', fontSize: '0.95rem', transition: 'all 0.2s',
+                background: view === 'axColor' ? '#fb923c' : '#f1f5f9',
+                color: view === 'axColor' ? '#fff' : '#64748b'
+              }}
+            >
+              <Palette size={18} /> AX 2026 EV 顏色查價
+            </button>
           </div>
         </div>
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: '#f97316', fontSize: '1rem', fontWeight: '800', background: '#fff7ed', padding: '8px 16px', borderRadius: '20px', border: '1px solid #ffedd5' }}>
@@ -32,7 +63,7 @@ function App() {
 
       {/* 內容區塊 */}
       <main style={{ flex: 1, padding: '20px 0' }}>
-        <PriceInquiryPage vehicleMaster={[]} />
+        {view === 'main' ? <PriceInquiryPage vehicleMaster={[]} /> : <AxColorPage />}
       </main>
 
       {/* 底部資訊 */}
