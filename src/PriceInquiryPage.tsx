@@ -180,7 +180,7 @@ export const PriceInquiryPage: React.FC<PriceInquiryPageProps> = ({ vehicleMaste
       const nModel = normalize(v.model);
       const nCombined = `${nBrand}${nModel}`;
       return nBrand.includes(term) || nModel.includes(term) || nCombined.includes(term);
-    }).slice(0, 15);
+    }).slice(0, 30);
   }, [searchTerm, fullMaster]);
 
   const handleSelect = (v: any) => {
