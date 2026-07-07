@@ -6,7 +6,7 @@
     "basePriceN": 1800,
     "discountS": 0.95,
     "discountSR": 0.9,
-    "discountUR": 0.76,
+    "discountUR": 0.8,
     "stepPrice": 200
   },
   {
@@ -16,7 +16,7 @@
     "basePriceN": 2200,
     "discountS": 0.95,
     "discountSR": 0.9,
-    "discountUR": 0.76,
+    "discountUR": 0.8,
     "stepPrice": 200
   },
   {
@@ -26,7 +26,7 @@
     "basePriceN": 2500,
     "discountS": 0.95,
     "discountSR": 0.9,
-    "discountUR": 0.76,
+    "discountUR": 0.8,
     "stepPrice": 500
   },
   {
@@ -36,7 +36,7 @@
     "basePriceN": 9500,
     "discountS": 0.95,
     "discountSR": 0.9,
-    "discountUR": 0.76,
+    "discountUR": 0.8,
     "stepPrice": 500
   },
   {
@@ -46,7 +46,7 @@
     "basePriceN": 7000,
     "discountS": 0.95,
     "discountSR": 0.9,
-    "discountUR": 0.76,
+    "discountUR": 0.8,
     "stepPrice": 500
   },
   {
@@ -56,7 +56,7 @@
     "basePriceN": 10000,
     "discountS": 0.95,
     "discountSR": 0.9,
-    "discountUR": 0.76,
+    "discountUR": 0.8,
     "stepPrice": 1000
   },
   {
@@ -66,7 +66,7 @@
     "basePriceN": 8000,
     "discountS": 0.95,
     "discountSR": 0.9,
-    "discountUR": 0.76,
+    "discountUR": 0.8,
     "stepPrice": 1000
   },
   {
@@ -76,7 +76,7 @@
     "basePriceN": 16000,
     "discountS": 0.95,
     "discountSR": 0.9,
-    "discountUR": 0.76,
+    "discountUR": 0.8,
     "stepPrice": 1000
   },
   {
@@ -86,7 +86,7 @@
     "basePriceN": 20000,
     "discountS": 0.95,
     "discountSR": 0.9,
-    "discountUR": 0.76,
+    "discountUR": 0.8,
     "stepPrice": 1000
   },
   {
@@ -96,7 +96,7 @@
     "basePriceN": 22000,
     "discountS": 0.95,
     "discountSR": 0.9,
-    "discountUR": 0.76,
+    "discountUR": 0.8,
     "stepPrice": 1000
   },
   {
@@ -106,7 +106,7 @@
     "basePriceN": 26000,
     "discountS": 0.95,
     "discountSR": 0.9,
-    "discountUR": 0.76,
+    "discountUR": 0.8,
     "stepPrice": 1000
   },
   {
@@ -116,7 +116,7 @@
     "basePriceN": 4000,
     "discountS": 0.95,
     "discountSR": 0.9,
-    "discountUR": 0.76,
+    "discountUR": 0.8,
     "stepPrice": 0
   },
   {
@@ -126,7 +126,7 @@
     "basePriceN": 3500,
     "discountS": 0.95,
     "discountSR": 0.9,
-    "discountUR": 0.76,
+    "discountUR": 0.8,
     "stepPrice": 0
   },
   {
@@ -136,7 +136,7 @@
     "basePriceN": 500,
     "discountS": 0.95,
     "discountSR": 0.9,
-    "discountUR": 0.76,
+    "discountUR": 0.8,
     "stepPrice": 0
   }
 ]
