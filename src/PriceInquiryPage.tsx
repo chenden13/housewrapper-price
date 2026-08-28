@@ -43,13 +43,13 @@ const PPF_PRICING: Record<string, Record<string, number>> = {
     '3M 100g (亮面)': 110000,
     '3M 150g (亮面)': 125000,
     '3M 200g (亮面)': 135000,
-    'Stek Lite (亮面)': 130000
+    'Stek Lite (亮面)': 140000
   },
   '消光犀牛皮': {
     'AX (消光)': 100000,
     'Pixel8bot (消光)': 110000,
     '3M 200m (消光)': 145000,
-    'Stek Matte (消光)': 140000
+    'Stek Matte (消光)': 150000
   }
 };
 
