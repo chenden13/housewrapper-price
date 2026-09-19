@@ -100,7 +100,7 @@ Error generating stack: `+t.message+`
 細節區域處理\r
 包含收邊、接縫與邊角位置清潔與調整\r
 成品檢查與保養建議\r
-提供後續清潔與保養方式，延長整體使用壽命`,basePriceN:8e3,discountS:.95,discountSR:.9,discountUR:.8,stepPrice:1e3},{itemName:"S1單層護盾",subtitle:"| SF結晶鍍膜（單層）含玻璃鍍膜、塑料件鍍膜",details:`🛡️ 基礎鍍膜（單層）\r
+提供後續清潔與保養方式，延長整體使用壽命`,basePriceN:8e3,discountS:.95,discountSR:.9,discountUR:.8,stepPrice:1e3},{itemName:"S1單層護盾",subtitle:"| SF結晶鍍膜（單層）含塑料件鍍膜",details:`🛡️ 基礎鍍膜（單層）\r
 建立基礎保護層，降低髒污附著\r
 服務流程：\r
 精緻清潔處理（同精緻洗車流程）\r
@@ -108,7 +108,7 @@ Error generating stack: `+t.message+`
 必要時進行輕度拋光調整\r
 鍍膜塗佈施工\r
 表面固化處理\r
-成品檢查與效果確認`,basePriceN:16e3,discountS:.95,discountSR:.9,discountUR:.8,stepPrice:1e3},{itemName:"S1雙層護盾",subtitle:"| SF結晶鍍膜（雙層）含玻璃鍍膜、塑料件鍍膜",details:`🛡️ 基礎鍍膜（雙層）\r
+成品檢查與效果確認`,basePriceN:16e3,discountS:.95,discountSR:.9,discountUR:.8,stepPrice:1e3},{itemName:"S1雙層護盾",subtitle:"| SF結晶鍍膜（雙層）含塑料件鍍膜",details:`🛡️ 基礎鍍膜（雙層）\r
 提升保護厚度與耐久性\r
 服務流程：\r
 精緻清潔處理（同精緻洗車流程）\r
@@ -116,7 +116,7 @@ Error generating stack: `+t.message+`
 第一層鍍膜施工（基礎附著）\r
 第二層加強塗佈（提升耐久與效果）\r
 固化處理\r
-表面檢查與修正`,basePriceN:2e4,discountS:.95,discountSR:.9,discountUR:.8,stepPrice:1e3},{itemName:"S2單層護盾",subtitle:"| CarPro結晶鍍膜（單層）含玻璃鍍膜、塑料件鍍膜",details:`🛡️ 基礎鍍膜（單層）\r
+表面檢查與修正`,basePriceN:2e4,discountS:.95,discountSR:.9,discountUR:.8,stepPrice:1e3},{itemName:"S2單層護盾",subtitle:"| CarPro結晶鍍膜（單層）含塑料件鍍膜",details:`🛡️ 基礎鍍膜（單層）\r
 建立基礎保護層，降低髒污附著\r
 服務流程：\r
 精緻清潔處理（同精緻洗車流程）\r
@@ -124,7 +124,7 @@ Error generating stack: `+t.message+`
 必要時進行輕度拋光調整\r
 鍍膜塗佈施工\r
 表面固化處理\r
-成品檢查與效果確認`,basePriceN:22e3,discountS:.95,discountSR:.9,discountUR:.8,stepPrice:1e3},{itemName:"S2雙層護盾",subtitle:"| CarPro結晶鍍膜（雙層）含玻璃鍍膜、塑料件鍍膜",details:`🛡️ 基礎鍍膜（雙層）\r
+成品檢查與效果確認`,basePriceN:22e3,discountS:.95,discountSR:.9,discountUR:.8,stepPrice:1e3},{itemName:"S2雙層護盾",subtitle:"| CarPro結晶鍍膜（雙層）含塑料件鍍膜",details:`🛡️ 基礎鍍膜（雙層）\r
 提升保護厚度與耐久性\r
 服務流程：\r
 精緻清潔處理（同精緻洗車流程）\r
