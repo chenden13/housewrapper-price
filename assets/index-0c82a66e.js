@@ -77,7 +77,15 @@ Error generating stack: `+t.message+`
 低侵入性清潔，維持膜料完整性\r
 邊角與接縫細節處理\r
 表面質感調整（均勻度 / 霧感）\r
-後續維護建議`,basePriceN:9500,discountS:.95,discountSR:.9,discountUR:.8,stepPrice:500},{itemName:"鏡透打底Lv.1",subtitle:"| 經典洗＋淺層拋光（提亮、去污、去水垢）＋季效型鍍膜",details:"",basePriceN:7e3,discountS:.95,discountSR:.9,discountUR:.8,stepPrice:500},{itemName:"鏡透打底Lv.2",subtitle:"| 經典洗＋深層拋光（提亮、去污、去水垢、太陽紋細紋修復）＋季效型鍍膜",details:`✨ 拋光保養\r
+後續維護建議`,basePriceN:9500,discountS:.95,discountSR:.9,discountUR:.8,stepPrice:500},{itemName:"鏡透打底Lv.1",subtitle:"| 經典洗＋淺層拋光（提亮、去污、去水垢）＋季效型鍍膜",details:`✨ 淺層拋光保養\r
+清除漆面水垢與輕微氧化層，恢復漆面乾淨透亮\r
+服務流程：\r
+精緻清潔處理（同精緻洗車流程）\r
+漆面狀況與水垢氧化評估\r
+淺層拋光處理（提亮 / 去污 / 去水垢）\r
+漆面脫脂清潔\r
+季效型鍍膜塗佈護理\r
+成品檢查與光澤確認`,basePriceN:7e3,discountS:.95,discountSR:.9,discountUR:.8,stepPrice:500},{itemName:"鏡透打底Lv.2",subtitle:"| 經典洗＋深層拋光（提亮、去污、去水垢、太陽紋細紋修復）＋季效型鍍膜",details:`✨ 拋光保養\r
 改善細紋與表面缺陷，提升整體光澤表現\r
 服務流程：\r
 精緻清潔處理（同精緻洗車流程）\r
