@@ -2042,8 +2042,8 @@
   {
     "brand": "FORMOSA",
     "model": "Matiz",
-    "size": "XS",
-    "detailingSize": "XS"
+    "size": "S",
+    "detailingSize": "S"
   },
   {
     "brand": "Foxtron",
@@ -3633,7 +3633,7 @@
     "brand": "Lotus",
     "model": "Elise",
     "size": "S",
-    "detailingSize": "XS"
+    "detailingSize": "S"
   },
   {
     "brand": "Lotus",
@@ -3669,7 +3669,7 @@
     "brand": "Lotus",
     "model": "Exige",
     "size": "S",
-    "detailingSize": "XS"
+    "detailingSize": "S"
   },
   {
     "brand": "Luxgen",
@@ -3968,8 +3968,8 @@
   {
     "brand": "MAZDA",
     "model": "mx-5",
-    "size": "XS",
-    "detailingSize": "XS"
+    "size": "S",
+    "detailingSize": "S"
   },
   {
     "brand": "MAZDA",
@@ -4634,8 +4634,8 @@
   {
     "brand": "MITSUBISHI",
     "model": "i-MiEV",
-    "size": "XS",
-    "detailingSize": "XS"
+    "size": "S",
+    "detailingSize": "S"
   },
   {
     "brand": "MITSUBISHI",
@@ -4959,13 +4959,13 @@
     "brand": "Peugeot",
     "model": "106",
     "size": "S",
-    "detailingSize": "XS"
+    "detailingSize": "S"
   },
   {
     "brand": "Peugeot",
     "model": "107",
     "size": "S",
-    "detailingSize": "XS"
+    "detailingSize": "S"
   },
   {
     "brand": "Peugeot",
@@ -5535,7 +5535,7 @@
     "brand": "Renault",
     "model": "Twingo",
     "size": "S",
-    "detailingSize": "XS"
+    "detailingSize": "S"
   },
   {
     "brand": "Renault",
@@ -5744,8 +5744,8 @@
   {
     "brand": "Škoda",
     "model": "Citigo",
-    "size": "XS",
-    "detailingSize": "XS"
+    "size": "S",
+    "detailingSize": "S"
   },
   {
     "brand": "Škoda",
@@ -5876,20 +5876,20 @@
   {
     "brand": "Smart",
     "model": "Fortwo Cabrio",
-    "size": "XS",
-    "detailingSize": "XS"
+    "size": "S",
+    "detailingSize": "S"
   },
   {
     "brand": "Smart",
     "model": "Fortwo Coupe",
-    "size": "XS",
-    "detailingSize": "XS"
+    "size": "S",
+    "detailingSize": "S"
   },
   {
     "brand": "SMART",
     "model": "fortwo",
-    "size": "XS",
-    "detailingSize": "XS"
+    "size": "S",
+    "detailingSize": "S"
   },
   {
     "brand": "Subaru",
@@ -6044,8 +6044,8 @@
   {
     "brand": "SUZUKI",
     "model": "Alto",
-    "size": "XS",
-    "detailingSize": "XS"
+    "size": "S",
+    "detailingSize": "S"
   },
   {
     "brand": "SUZUKI",
@@ -6056,14 +6056,14 @@
   {
     "brand": "SUZUKI",
     "model": "Cappuccino",
-    "size": "XS",
-    "detailingSize": "XS"
+    "size": "S",
+    "detailingSize": "S"
   },
   {
     "brand": "SUZUKI",
     "model": "Cervo",
-    "size": "XS",
-    "detailingSize": "XS"
+    "size": "S",
+    "detailingSize": "S"
   },
   {
     "brand": "SUZUKI",
@@ -6092,8 +6092,8 @@
   {
     "brand": "SUZUKI",
     "model": "Hustler",
-    "size": "XS",
-    "detailingSize": "XS"
+    "size": "S",
+    "detailingSize": "S"
   },
   {
     "brand": "SUZUKI",
@@ -6122,8 +6122,8 @@
   {
     "brand": "SUZUKI",
     "model": "Lapin",
-    "size": "XS",
-    "detailingSize": "XS"
+    "size": "S",
+    "detailingSize": "S"
   },
   {
     "brand": "SUZUKI",
@@ -6134,8 +6134,8 @@
   {
     "brand": "SUZUKI",
     "model": "Spacia",
-    "size": "XS",
-    "detailingSize": "XS"
+    "size": "S",
+    "detailingSize": "S"
   },
   {
     "brand": "SUZUKI",
@@ -7007,7 +7007,6 @@
     "size": "2XL",
     "detailingSize": "2XL"
   },
-
   {
     "brand": "VOLVO",
     "model": "s60",

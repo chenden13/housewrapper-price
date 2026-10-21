@@ -1,10 +1,16 @@
 import React, { useState } from 'react';
 import { PriceInquiryPage } from './PriceInquiryPage';
 import { AxColorPage } from './AxColorPage';
-import { ShieldCheck, Palette, LayoutDashboard } from 'lucide-react';
+import { PriceSheetPage } from './PriceSheetPage';
+import { ShieldCheck, Palette, LayoutDashboard, FileSpreadsheet } from 'lucide-react';
 
 function App() {
-  const [view, setView] = useState<'main' | 'axColor'>('main');
+  const [view, setView] = useState<'main' | 'priceSheet' | 'axColor'>(() => {
+    if (typeof window !== 'undefined' && window.location.search.includes('view=priceSheet')) {
+      return 'priceSheet';
+    }
+    return 'main';
+  });
 
   return (
     <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
@@ -40,7 +46,7 @@ function App() {
                 color: view === 'main' ? '#fff' : '#64748b'
               }}
             >
-              <LayoutDashboard size={18} /> 主查詢系統
+              <LayoutDashboard size={18} /> 車型查詢試算
             </button>
             <button
               onClick={() => setView('axColor')}
@@ -54,6 +60,18 @@ function App() {
             >
               <Palette size={18} /> AX 2026 EV 顏色查價
             </button>
+            <button
+              onClick={() => setView('priceSheet')}
+              style={{
+                display: 'flex', alignItems: 'center', gap: '6px',
+                padding: '8px 16px', borderRadius: '12px', border: 'none', cursor: 'pointer',
+                fontWeight: 'bold', fontSize: '0.95rem', transition: 'all 0.2s',
+                background: view === 'priceSheet' ? '#fb923c' : '#f1f5f9',
+                color: view === 'priceSheet' ? '#fff' : '#64748b'
+              }}
+            >
+              <FileSpreadsheet size={18} /> 官方價目表 (犀牛皮 / 改色)
+            </button>
           </div>
         </div>
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: '#f97316', fontSize: '1rem', fontWeight: '800', background: '#fff7ed', padding: '8px 16px', borderRadius: '20px', border: '1px solid #ffedd5' }}>
@@ -63,7 +81,13 @@ function App() {
 
       {/* 內容區塊 */}
       <main style={{ flex: 1, padding: '20px 0' }}>
-        {view === 'main' ? <PriceInquiryPage vehicleMaster={[]} /> : <AxColorPage />}
+        {view === 'priceSheet' ? (
+          <PriceSheetPage />
+        ) : view === 'main' ? (
+          <PriceInquiryPage vehicleMaster={[]} />
+        ) : (
+          <AxColorPage />
+        )}
       </main>
 
       {/* 底部資訊 */}
