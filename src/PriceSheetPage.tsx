@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { ShieldCheck, Palette, FileText } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { ShieldCheck, Palette, FileText, Share2, Check, Download, ZoomIn, X } from 'lucide-react';
 
 type SizeKey = 'S' | 'M' | 'L' | 'XL' | '2XL';
 
@@ -71,7 +71,7 @@ const COLOR_WRAP_DATA = {
     { type: '3M 特殊色系一階', series: 'GP/SP系列', base: 75000 },
     { type: '3M 特殊色系二階', series: 'HG系列', base: 80000 },
   ],
-  frontAddon: {
+  frontPpfAddon: {
     title: '常跑高速 ｜ 車頭加強犀牛皮防護',
     sub1: '建議加強防護的鈑件：引擎蓋、前葉子版',
     sub2: '前保桿及後照鏡為塑膠件不建議加價防護',
@@ -83,19 +83,66 @@ const COLOR_WRAP_DATA = {
 };
 
 export const PriceSheetPage: React.FC = () => {
+  const getInitialSize = (): SizeKey => {
+    if (typeof window !== 'undefined') {
+      const params = new URLSearchParams(window.location.search);
+      const s = (params.get('size') || '').toUpperCase();
+      if (SIZES.includes(s as SizeKey)) return s as SizeKey;
+      const hashMatch = window.location.hash.match(/size=([A-Z0-9]+)/i);
+      if (hashMatch && SIZES.includes(hashMatch[1].toUpperCase() as SizeKey)) {
+        return hashMatch[1].toUpperCase() as SizeKey;
+      }
+    }
+    return 'S';
+  };
+
   const [sheetType, setSheetType] = useState<'ppf' | 'wrap'>('ppf');
-  const [selectedSize, setSelectedSize] = useState<SizeKey>('S');
+  const [selectedSize, setSelectedSize] = useState<SizeKey>(getInitialSize);
   const [viewMode, setViewMode] = useState<'poster' | 'allTable'>('poster');
+  const [copied, setCopied] = useState(false);
+  const [lightboxImage, setLightboxImage] = useState<{ src: string; title: string } | null>(null);
 
   const isExportMode = typeof window !== 'undefined' && (
     window.location.search.includes('export=1') ||
     window.location.hash.includes('export')
   );
 
-  const filename = `${sheetType === 'ppf' ? '犀牛皮價目表' : '改色價目表'}_${selectedSize}尺寸.jpg`;
+  // 監聽瀏覽器上一頁/下一頁
+  useEffect(() => {
+    const handlePopState = () => {
+      setSelectedSize(getInitialSize());
+    };
+    window.addEventListener('popstate', handlePopState);
+    return () => window.removeEventListener('popstate', handlePopState);
+  }, []);
+
+  const handleSelectSize = (size: SizeKey) => {
+    setSelectedSize(size);
+    setViewMode('poster');
+    if (typeof window !== 'undefined') {
+      const url = new URL(window.location.href);
+      url.searchParams.set('view', 'priceSheet');
+      url.searchParams.set('size', size);
+      window.history.replaceState({}, '', url.toString());
+    }
+  };
+
+  const handleCopyLink = () => {
+    if (typeof window !== 'undefined') {
+      const url = `${window.location.origin}${window.location.pathname}?view=priceSheet&size=${selectedSize}`;
+      navigator.clipboard.writeText(url).then(() => {
+        setCopied(true);
+        setTimeout(() => setCopied(false), 2500);
+      });
+    }
+  };
+
+  const ppfFilename = `犀牛皮價目表_${selectedSize}尺寸.jpg`;
+  const wrapFilename = `改色價目表_${selectedSize}尺寸.jpg`;
+  const exportFilename = `${sheetType === 'ppf' ? '犀牛皮價目表' : '改色價目表'}_${selectedSize}尺寸.jpg`;
 
   return (
-    <div style={{ maxWidth: '1080px', margin: '0 auto', padding: '10px 20px 60px 20px' }}>
+    <div style={{ maxWidth: '1480px', margin: '0 auto', padding: '10px 20px 60px 20px' }}>
       {/* 操作導航列 */}
       <div style={{ 
         display: 'flex', 
@@ -110,65 +157,66 @@ export const PriceSheetPage: React.FC = () => {
         boxShadow: '0 4px 15px rgba(0,0,0,0.04)',
         border: '1px solid #e2e8f0'
       }}>
-        {/* 價目表種類切換 */}
-        <div style={{ display: 'flex', gap: '8px' }}>
-          <button
-            data-testid="tab-ppf"
-            onClick={() => setSheetType('ppf')}
-            style={{
-              padding: '9px 18px',
-              borderRadius: '10px',
-              border: 'none',
-              cursor: 'pointer',
-              fontWeight: '800',
-              fontSize: '0.95rem',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '6px',
-              background: sheetType === 'ppf' ? '#0f766e' : '#f1f5f9',
-              color: sheetType === 'ppf' ? '#fff' : '#64748b',
-              transition: 'all 0.2s'
-            }}
-          >
-            <ShieldCheck size={18} /> 新版犀牛皮價目表
-          </button>
-          <button
-            data-testid="tab-wrap"
-            onClick={() => setSheetType('wrap')}
-            style={{
-              padding: '9px 18px',
-              borderRadius: '10px',
-              border: 'none',
-              cursor: 'pointer',
-              fontWeight: '800',
-              fontSize: '0.95rem',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '6px',
-              background: sheetType === 'wrap' ? '#ea580c' : '#f1f5f9',
-              color: sheetType === 'wrap' ? '#fff' : '#64748b',
-              transition: 'all 0.2s'
-            }}
-          >
-            <Palette size={18} /> 改色價目表
-          </button>
+        {/* 左側標題與目前尺寸標籤 */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '12px', flexWrap: 'wrap' }}>
+          <div>
+            <div style={{ fontSize: '1.2rem', fontWeight: '900', color: '#1e293b', display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <span>好室多膜 官方價目表</span>
+              <span style={{ fontSize: '0.85rem', padding: '2px 10px', background: '#fb923c', color: '#fff', borderRadius: '8px', fontWeight: 'bold' }}>
+                {selectedSize} 尺寸
+              </span>
+            </div>
+            <div style={{ fontSize: '0.8rem', color: '#64748b', marginTop: '2px' }}>
+              犀牛皮與改色雙海報並排呈現 ｜ 具備專屬獨立網址可直接分享
+            </div>
+          </div>
+
+          {/* Export 模式專用切換器（維持 Puppeteer 自動匯出腳本相容性） */}
+          {isExportMode && (
+            <div style={{ display: 'flex', gap: '8px', marginLeft: '10px' }}>
+              <button
+                data-testid="tab-ppf"
+                onClick={() => setSheetType('ppf')}
+                style={{
+                  padding: '6px 12px', borderRadius: '8px', border: 'none', cursor: 'pointer',
+                  fontWeight: '800', fontSize: '0.85rem',
+                  background: sheetType === 'ppf' ? '#0f766e' : '#f1f5f9',
+                  color: sheetType === 'ppf' ? '#fff' : '#64748b'
+                }}
+              >
+                犀牛皮價目表
+              </button>
+              <button
+                data-testid="tab-wrap"
+                onClick={() => setSheetType('wrap')}
+                style={{
+                  padding: '6px 12px', borderRadius: '8px', border: 'none', cursor: 'pointer',
+                  fontWeight: '800', fontSize: '0.85rem',
+                  background: sheetType === 'wrap' ? '#ea580c' : '#f1f5f9',
+                  color: sheetType === 'wrap' ? '#fff' : '#64748b'
+                }}
+              >
+                改色價目表
+              </button>
+            </div>
+          )}
         </div>
 
-        {/* 尺寸選擇器 */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '6px', flexWrap: 'wrap' }}>
-          <span style={{ fontSize: '0.85rem', fontWeight: 'bold', color: '#64748b', marginRight: '4px' }}>尺寸:</span>
+        {/* 尺寸選擇器 & 複製獨立網址按鈕 */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
+          <span style={{ fontSize: '0.85rem', fontWeight: 'bold', color: '#64748b', marginRight: '2px' }}>尺寸:</span>
           {SIZES.map(s => (
             <button
               key={s}
               data-testid={`size-${s}`}
-              onClick={() => { setSelectedSize(s); setViewMode('poster'); }}
+              onClick={() => handleSelectSize(s)}
               style={{
-                padding: '6px 14px',
+                padding: '7px 15px',
                 borderRadius: '8px',
                 border: 'none',
                 cursor: 'pointer',
                 fontWeight: '900',
-                fontSize: '0.9rem',
+                fontSize: '0.92rem',
                 background: selectedSize === s && viewMode === 'poster' ? '#1e293b' : '#f8fafc',
                 color: selectedSize === s && viewMode === 'poster' ? '#fff' : '#475569',
                 boxShadow: selectedSize === s && viewMode === 'poster' ? '0 2px 8px rgba(0,0,0,0.2)' : 'none',
@@ -181,16 +229,40 @@ export const PriceSheetPage: React.FC = () => {
               {s}尺寸
             </button>
           ))}
+
+          {/* 複製本尺寸專屬連結 */}
+          <button
+            onClick={handleCopyLink}
+            title={`複製 ${selectedSize} 尺寸獨立網址`}
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '6px',
+              padding: '7px 14px',
+              borderRadius: '8px',
+              border: '1px solid #fed7aa',
+              background: copied ? '#ecfdf5' : '#fff7ed',
+              color: copied ? '#059669' : '#c2410c',
+              cursor: 'pointer',
+              fontWeight: '800',
+              fontSize: '0.88rem',
+              transition: 'all 0.2s',
+              boxShadow: '0 1px 3px rgba(0,0,0,0.04)'
+            }}
+          >
+            {copied ? <Check size={16} color="#059669" /> : <Share2 size={16} />}
+            <span>{copied ? `已複製 ${selectedSize} 尺寸連結！` : `複製 ${selectedSize} 專屬連結`}</span>
+          </button>
+
           <button
             onClick={() => setViewMode(viewMode === 'allTable' ? 'poster' : 'allTable')}
             style={{
-              marginLeft: '8px',
-              padding: '6px 14px',
+              padding: '7px 14px',
               borderRadius: '8px',
               border: '1px solid #cbd5e1',
               cursor: 'pointer',
               fontWeight: '800',
-              fontSize: '0.85rem',
+              fontSize: '0.88rem',
               background: viewMode === 'allTable' ? '#3b82f6' : '#fff',
               color: viewMode === 'allTable' ? '#fff' : '#334155',
               display: 'flex',
@@ -203,31 +275,150 @@ export const PriceSheetPage: React.FC = () => {
         </div>
       </div>
 
-      {/* 視圖 1: 單一尺寸海報模式 */}
+      {/* 視圖 1: 海報模式 */}
       {viewMode === 'poster' && (
         <>
-          {/* 官方圖檔模式 (直接放 JPG 圖檔，右鍵即可另存圖片) */}
+          {/* 官方圖檔模式：改色與犀牛皮一起顯示 (左右兩張並排，手機自動上下排列) */}
           {!isExportMode && (
-            <div style={{ display: 'flex', justifyContent: 'center' }}>
+            <div className="posters-dual-grid">
+              {/* 左邊海報：犀牛皮價目表 */}
               <div style={{
-                maxWidth: '720px',
-                width: '100%',
-                borderRadius: '8px',
-                overflow: 'hidden',
-                boxShadow: '0 25px 60px -15px rgba(27, 46, 39, 0.22), 0 0 0 1px rgba(184, 150, 96, 0.4)',
                 background: '#fff',
-                border: '1px solid rgba(184, 150, 96, 0.45)'
+                borderRadius: '16px',
+                padding: '18px',
+                boxShadow: '0 12px 30px -6px rgba(15, 118, 110, 0.12), 0 0 0 1px rgba(15, 118, 110, 0.12)',
+                border: '1px solid #ccfbf1',
+                display: 'flex',
+                flexDirection: 'column'
               }}>
-                <img 
-                  src={`./price_sheets_jpg/${filename}?v=3`} 
-                  alt={`${sheetType === 'ppf' ? '犀牛皮價目表' : '改色價目表'} - ${selectedSize}尺寸`}
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '14px', flexWrap: 'wrap', gap: '8px' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    <div style={{ width: '34px', height: '34px', borderRadius: '8px', background: '#0f766e', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff' }}>
+                      <ShieldCheck size={20} />
+                    </div>
+                    <div>
+                      <div style={{ fontSize: '1.08rem', fontWeight: '900', color: '#0f766e', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                        犀牛皮官方價目表
+                        <span style={{ fontSize: '0.78rem', padding: '2px 8px', background: '#ccfbf1', color: '#0f766e', borderRadius: '6px', fontWeight: '800' }}>
+                          {selectedSize} 尺寸
+                        </span>
+                      </div>
+                      <div style={{ fontSize: '0.75rem', color: '#64748b' }}>AX系列 / STEK / 3M 原廠保固</div>
+                    </div>
+                  </div>
+                  <div style={{ display: 'flex', gap: '6px' }}>
+                    <button
+                      onClick={() => setLightboxImage({ src: `./price_sheets_jpg/${ppfFilename}?v=3`, title: `犀牛皮官方價目表 (${selectedSize}尺寸)` })}
+                      style={{
+                        display: 'flex', alignItems: 'center', gap: '4px',
+                        padding: '6px 10px', borderRadius: '8px', border: '1px solid #cbd5e1',
+                        background: '#f8fafc', color: '#334155', fontSize: '0.8rem', fontWeight: '700', cursor: 'pointer'
+                      }}
+                    >
+                      <ZoomIn size={14} /> 放大
+                    </button>
+                    <a
+                      href={`./price_sheets_jpg/${ppfFilename}`}
+                      download={ppfFilename}
+                      style={{
+                        display: 'flex', alignItems: 'center', gap: '4px',
+                        padding: '6px 12px', borderRadius: '8px', border: 'none',
+                        background: '#0f766e', color: '#fff', fontSize: '0.8rem', fontWeight: '700', textDecoration: 'none'
+                      }}
+                    >
+                      <Download size={14} /> 下載JPG
+                    </a>
+                  </div>
+                </div>
+
+                <div
+                  onClick={() => setLightboxImage({ src: `./price_sheets_jpg/${ppfFilename}?v=3`, title: `犀牛皮官方價目表 (${selectedSize}尺寸)` })}
                   style={{
-                    width: '100%',
-                    height: 'auto',
-                    display: 'block',
-                    cursor: 'pointer'
+                    borderRadius: '12px',
+                    overflow: 'hidden',
+                    border: '1px solid rgba(184, 150, 96, 0.4)',
+                    boxShadow: '0 8px 24px -4px rgba(0,0,0,0.06)',
+                    cursor: 'zoom-in',
+                    background: '#fff'
                   }}
-                />
+                  title="點擊查看超高清大圖"
+                >
+                  <img 
+                    src={`./price_sheets_jpg/${ppfFilename}?v=3`} 
+                    alt={`犀牛皮價目表 - ${selectedSize}尺寸`}
+                    style={{ width: '100%', height: 'auto', display: 'block' }}
+                  />
+                </div>
+              </div>
+
+              {/* 右邊海報：改色價目表 */}
+              <div style={{
+                background: '#fff',
+                borderRadius: '16px',
+                padding: '18px',
+                boxShadow: '0 12px 30px -6px rgba(234, 88, 12, 0.12), 0 0 0 1px rgba(234, 88, 12, 0.12)',
+                border: '1px solid #ffedd5',
+                display: 'flex',
+                flexDirection: 'column'
+              }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '14px', flexWrap: 'wrap', gap: '8px' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    <div style={{ width: '34px', height: '34px', borderRadius: '8px', background: '#ea580c', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff' }}>
+                      <Palette size={20} />
+                    </div>
+                    <div>
+                      <div style={{ fontSize: '1.08rem', fontWeight: '900', color: '#ea580c', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                        全車改色官方價目表
+                        <span style={{ fontSize: '0.78rem', padding: '2px 8px', background: '#ffedd5', color: '#c2410c', borderRadius: '6px', fontWeight: '800' }}>
+                          {selectedSize} 尺寸
+                        </span>
+                      </div>
+                      <div style={{ fontSize: '0.75rem', color: '#64748b' }}>AX 2000系列 / 3M 2080 色系</div>
+                    </div>
+                  </div>
+                  <div style={{ display: 'flex', gap: '6px' }}>
+                    <button
+                      onClick={() => setLightboxImage({ src: `./price_sheets_jpg/${wrapFilename}?v=3`, title: `改色官方價目表 (${selectedSize}尺寸)` })}
+                      style={{
+                        display: 'flex', alignItems: 'center', gap: '4px',
+                        padding: '6px 10px', borderRadius: '8px', border: '1px solid #cbd5e1',
+                        background: '#f8fafc', color: '#334155', fontSize: '0.8rem', fontWeight: '700', cursor: 'pointer'
+                      }}
+                    >
+                      <ZoomIn size={14} /> 放大
+                    </button>
+                    <a
+                      href={`./price_sheets_jpg/${wrapFilename}`}
+                      download={wrapFilename}
+                      style={{
+                        display: 'flex', alignItems: 'center', gap: '4px',
+                        padding: '6px 12px', borderRadius: '8px', border: 'none',
+                        background: '#ea580c', color: '#fff', fontSize: '0.8rem', fontWeight: '700', textDecoration: 'none'
+                      }}
+                    >
+                      <Download size={14} /> 下載JPG
+                    </a>
+                  </div>
+                </div>
+
+                <div
+                  onClick={() => setLightboxImage({ src: `./price_sheets_jpg/${wrapFilename}?v=3`, title: `改色官方價目表 (${selectedSize}尺寸)` })}
+                  style={{
+                    borderRadius: '12px',
+                    overflow: 'hidden',
+                    border: '1px solid rgba(184, 150, 96, 0.4)',
+                    boxShadow: '0 8px 24px -4px rgba(0,0,0,0.06)',
+                    cursor: 'zoom-in',
+                    background: '#fff'
+                  }}
+                  title="點擊查看超高清大圖"
+                >
+                  <img 
+                    src={`./price_sheets_jpg/${wrapFilename}?v=3`} 
+                    alt={`改色價目表 - ${selectedSize}尺寸`}
+                    style={{ width: '100%', height: 'auto', display: 'block' }}
+                  />
+                </div>
               </div>
             </div>
           )}
@@ -974,8 +1165,90 @@ export const PriceSheetPage: React.FC = () => {
         </div>
       )}
 
-      {/* 列印專用 CSS */}
+      {/* 燈箱超高清放大預覽 */}
+      {lightboxImage && (
+        <div 
+          onClick={() => setLightboxImage(null)}
+          style={{
+            position: 'fixed',
+            top: 0, left: 0, right: 0, bottom: 0,
+            background: 'rgba(15, 23, 42, 0.88)',
+            backdropFilter: 'blur(6px)',
+            zIndex: 9999,
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'center',
+            padding: '16px'
+          }}
+        >
+          <div 
+            onClick={(e) => e.stopPropagation()}
+            style={{
+              maxWidth: '960px',
+              width: '100%',
+              maxHeight: '92vh',
+              background: '#fff',
+              borderRadius: '16px',
+              overflow: 'hidden',
+              boxShadow: '0 25px 60px rgba(0,0,0,0.5)',
+              display: 'flex',
+              flexDirection: 'column'
+            }}
+          >
+            <div style={{
+              padding: '12px 20px',
+              background: '#1e293b',
+              color: '#fff',
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'center'
+            }}>
+              <div style={{ fontWeight: '800', fontSize: '1rem', color: '#f8fafc' }}>{lightboxImage.title}</div>
+              <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+                <a
+                  href={lightboxImage.src}
+                  download
+                  style={{
+                    display: 'flex', alignItems: 'center', gap: '5px',
+                    padding: '6px 14px', borderRadius: '8px', background: '#3b82f6', color: '#fff',
+                    fontSize: '0.85rem', fontWeight: 'bold', textDecoration: 'none'
+                  }}
+                >
+                  <Download size={15} /> 下載高畫質原圖
+                </a>
+                <button
+                  onClick={() => setLightboxImage(null)}
+                  style={{
+                    background: 'rgba(255,255,255,0.1)', border: 'none', color: '#fff', cursor: 'pointer',
+                    padding: '6px 10px', borderRadius: '8px', display: 'flex', alignItems: 'center'
+                  }}
+                >
+                  <X size={20} />
+                </button>
+              </div>
+            </div>
+            <div style={{ overflowY: 'auto', padding: '15px', textAlign: 'center', background: '#0b1329' }}>
+              <img src={lightboxImage.src} alt={lightboxImage.title} style={{ maxWidth: '100%', height: 'auto', borderRadius: '8px', boxShadow: '0 10px 30px rgba(0,0,0,0.3)' }} />
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* 雙海報響應式排版 CSS */}
       <style>{`
+        .posters-dual-grid {
+          display: grid;
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+          gap: 28px;
+          align-items: start;
+        }
+        @media (max-width: 960px) {
+          .posters-dual-grid {
+            grid-template-columns: 1fr !important;
+            gap: 32px !important;
+          }
+        }
         @media print {
           nav, footer, button {
             display: none !important;
@@ -992,3 +1265,4 @@ export const PriceSheetPage: React.FC = () => {
     </div>
   );
 };
+

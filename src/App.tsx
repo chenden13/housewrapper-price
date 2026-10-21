@@ -5,12 +5,49 @@ import { PriceSheetPage } from './PriceSheetPage';
 import { ShieldCheck, Palette, LayoutDashboard, FileSpreadsheet } from 'lucide-react';
 
 function App() {
-  const [view, setView] = useState<'main' | 'priceSheet' | 'axColor'>(() => {
-    if (typeof window !== 'undefined' && window.location.search.includes('view=priceSheet')) {
-      return 'priceSheet';
+  const getViewFromUrl = (): 'main' | 'priceSheet' | 'axColor' => {
+    if (typeof window !== 'undefined') {
+      const params = new URLSearchParams(window.location.search);
+      if (params.get('view') === 'priceSheet' || params.has('size') || window.location.hash.includes('priceSheet')) {
+        return 'priceSheet';
+      }
+      if (params.get('view') === 'axColor' || window.location.hash.includes('axColor')) {
+        return 'axColor';
+      }
     }
     return 'main';
-  });
+  };
+
+  const [view, setView] = useState<'main' | 'priceSheet' | 'axColor'>(getViewFromUrl);
+
+  // 監聽瀏覽器上一頁/下一頁
+  React.useEffect(() => {
+    const handlePopState = () => {
+      setView(getViewFromUrl());
+    };
+    window.addEventListener('popstate', handlePopState);
+    return () => window.removeEventListener('popstate', handlePopState);
+  }, []);
+
+  const handleViewChange = (newView: 'main' | 'priceSheet' | 'axColor') => {
+    setView(newView);
+    if (typeof window !== 'undefined') {
+      const url = new URL(window.location.href);
+      if (newView === 'main') {
+        url.searchParams.delete('view');
+        url.searchParams.delete('size');
+      } else if (newView === 'priceSheet') {
+        url.searchParams.set('view', 'priceSheet');
+        if (!url.searchParams.has('size')) {
+          url.searchParams.set('size', 'S');
+        }
+      } else if (newView === 'axColor') {
+        url.searchParams.set('view', 'axColor');
+        url.searchParams.delete('size');
+      }
+      window.history.pushState({}, '', url.toString());
+    }
+  };
 
   return (
     <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
@@ -29,15 +66,15 @@ function App() {
         flexWrap: 'wrap',
         gap: '15px'
       }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '16px', flexWrap: 'wrap' }}>
           <img src="./logo.jpg" alt="好室多膜 LOGO" style={{ width: '60px', height: 'auto', borderRadius: '8px' }} />
           <div>
             <h1 style={{ margin: 0, fontSize: '1.6rem', fontWeight: '900', color: '#fb923c' }}>好室多膜</h1>
             <div style={{ fontSize: '0.9rem', color: '#fb923c', fontWeight: 'bold', letterSpacing: '2px' }}>HOUSE WRAPPER</div>
           </div>
-          <div style={{ display: 'flex', gap: '10px', marginLeft: '20px' }}>
+          <div style={{ display: 'flex', gap: '10px', marginLeft: '10px', flexWrap: 'wrap' }}>
             <button
-              onClick={() => setView('main')}
+              onClick={() => handleViewChange('main')}
               style={{
                 display: 'flex', alignItems: 'center', gap: '6px',
                 padding: '8px 16px', borderRadius: '12px', border: 'none', cursor: 'pointer',
@@ -49,7 +86,7 @@ function App() {
               <LayoutDashboard size={18} /> 車型查詢試算
             </button>
             <button
-              onClick={() => setView('axColor')}
+              onClick={() => handleViewChange('axColor')}
               style={{
                 display: 'flex', alignItems: 'center', gap: '6px',
                 padding: '8px 16px', borderRadius: '12px', border: 'none', cursor: 'pointer',
@@ -61,7 +98,7 @@ function App() {
               <Palette size={18} /> AX 2026 EV 顏色查價
             </button>
             <button
-              onClick={() => setView('priceSheet')}
+              onClick={() => handleViewChange('priceSheet')}
               style={{
                 display: 'flex', alignItems: 'center', gap: '6px',
                 padding: '8px 16px', borderRadius: '12px', border: 'none', cursor: 'pointer',
