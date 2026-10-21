@@ -70,17 +70,19 @@ const REAR_COATING_PRICING: Record<string, number> = {
 };
 
 const calculateFrontPpfPrice = (base: number, size: string) => {
-  if (['S', 'M', 'L'].includes(size)) return base;
-  if (size === 'XL') return base + 5000;
-  if (size === '2XL') return base + 10000;
+  const s = getValidSize(size);
+  if (['S', 'M', 'L'].includes(s)) return base;
+  if (s === 'XL') return base + 5000;
+  if (s === '2XL') return base + 10000;
   return base;
 };
 
 const calculateRearCoatingPrice = (base: number, size: string) => {
-  if (['S', 'M'].includes(size)) return base;
-  if (size === 'L') return base + 1000;
-  if (size === 'XL') return base + 2000;
-  if (size === '2XL') return base + 3000;
+  const s = getValidSize(size);
+  if (['S', 'M'].includes(s)) return base;
+  if (s === 'L') return base + 1000;
+  if (s === 'XL') return base + 2000;
+  if (s === '2XL') return base + 3000;
   return base;
 };
 
@@ -106,8 +108,16 @@ const SIZE_OFFSET: Record<string, number> = {
   '2XL': 20000,
 };
 
+export const getValidSize = (size?: string): 'S' | 'M' | 'L' | 'XL' | '2XL' => {
+  const s = (size || '').toUpperCase().trim();
+  if (s === 'S' || s === 'M' || s === 'L' || s === 'XL' || s === '2XL') return s;
+  if (s === '3XL') return '2XL';
+  if (s === 'XS') return 'S';
+  return 'M';
+};
+
 const calculateWrapPrice = (basePrice: number, size: string) => {
-  return basePrice + (SIZE_OFFSET[size] || 0);
+  return basePrice + (SIZE_OFFSET[getValidSize(size)] || 0);
 };
 
 export const PriceInquiryPage: React.FC<PriceInquiryPageProps> = ({ vehicleMaster, onBack, initialMode }) => {
@@ -357,10 +367,10 @@ export const PriceInquiryPage: React.FC<PriceInquiryPageProps> = ({ vehicleMaste
                     </div>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                       <span style={{ background: '#e0e7ff', color: '#4338ca', fontSize: '0.75rem', padding: '4px 8px', borderRadius: '6px', fontWeight: 'bold' }}>
-                        貼膜: {v.size || 'M'}
+                        貼膜: {getValidSize(v.size)}
                       </span>
                       <span style={{ background: '#e0f2fe', color: '#0369a1', fontSize: '0.75rem', padding: '4px 8px', borderRadius: '6px', fontWeight: 'bold' }}>
-                        洗車: {v.detailingSize || 'M'}
+                        洗車: {getValidSize(v.detailingSize)}
                       </span>
                       <ArrowRight size={16} color="#cbd5e1" />
                     </div>
@@ -567,7 +577,7 @@ export const PriceInquiryPage: React.FC<PriceInquiryPageProps> = ({ vehicleMaste
                         color: '#4338ca',
                         fontWeight: '800'
                       }}>
-                        貼膜: {v.size || 'M'}
+                        貼膜: {getValidSize(v.size)}
                       </span>
                     </div>
                   </div>
@@ -601,10 +611,10 @@ export const PriceInquiryPage: React.FC<PriceInquiryPageProps> = ({ vehicleMaste
               <h3 style={{ fontSize: '1.8rem', margin: 0, fontWeight: '900' }}>{selectedVehicle.brand} {selectedVehicle.model}</h3>
               <div style={{ display: 'flex', gap: '12px', marginTop: '8px', flexWrap: 'wrap' }}>
                 <span style={{ background: 'rgba(255, 255, 255, 0.2)', padding: '4px 12px', borderRadius: '8px', fontSize: '0.85rem', fontWeight: 'bold' }}>
-                  貼膜尺寸: {selectedVehicle.size || 'M'}
+                  貼膜尺寸: {getValidSize(selectedVehicle.size)}
                 </span>
                 <span style={{ background: 'rgba(255, 255, 255, 0.35)', padding: '4px 12px', borderRadius: '8px', fontSize: '0.85rem', fontWeight: 'bold', border: '1px solid rgba(255, 255, 255, 0.5)' }}>
-                  洗車/美容尺寸: {(selectedVehicle as any).detailingSize || 'M'}
+                  洗車/美容尺寸: {getValidSize((selectedVehicle as any).detailingSize)}
                 </span>
               </div>
             </div>
