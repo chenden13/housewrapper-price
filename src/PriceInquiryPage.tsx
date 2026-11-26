@@ -125,6 +125,7 @@ export const PriceInquiryPage: React.FC<PriceInquiryPageProps> = ({ vehicleMaste
   const [selectedVehicle, setSelectedVehicle] = useState<Vehicle | null>(null);
   const [activeCategory, setActiveCategory] = useState<'detailing' | 'film'>(initialMode || 'film');
   const [expandedDetailing, setExpandedDetailing] = useState<string[]>([]);
+  const [selectedDetailingGroup, setSelectedDetailingGroup] = useState<string>('all');
   const [colorSearch, setColorSearch] = useState('');
   const [selectedColorSize, setSelectedColorSize] = useState<string>('M');
 
@@ -626,110 +627,354 @@ export const PriceInquiryPage: React.FC<PriceInquiryPageProps> = ({ vehicleMaste
 
           {activeCategory === 'detailing' ? (
             /* 汽車美容報價內容 */
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '25px' }}>
+            (() => {
+              const detailingGroups = [
+                {
+                  title: '保養洗車、基本護理',
+                  shortTitle: '保養洗車 / 護理',
+                  icon: Droplets,
+                  theme: { main: '#ea580c', softBg: '#fff7ed', border: '#fed7aa', badgeBg: '#ffedd5', badgeText: '#c2410c' },
+                  items: detailingPrices.filter(i =>
+                    ['精緻洗車保養＆內裝清潔', '漆面深層清潔（非包膜車專用）', '漆面基礎拋光修復', '漆面深層拋光修復', '視界去污'].includes(i.itemName)
+                  ),
+                },
+                {
+                  title: '拋光鍍膜',
+                  shortTitle: '結晶鍍膜 / 玻璃鋁圈',
+                  icon: Sparkles,
+                  theme: { main: '#7c3aed', softBg: '#f5f3ff', border: '#ddd6fe', badgeBg: '#ede9fe', badgeText: '#6d28d9' },
+                  items: detailingPrices.filter(i =>
+                    ['SF單層護盾｜一年期', 'SF雙層護盾｜兩年期', 'CarPro單層護盾｜一年期', 'CarPro雙層護盾｜兩年期', '全車玻璃鍍膜(含除油墨)', '鋁圈鍍膜'].includes(i.itemName)
+                  ),
+                },
+                {
+                  title: '貼膜車專屬方案',
+                  shortTitle: '貼膜車專屬',
+                  icon: ShieldCheck,
+                  theme: { main: '#059669', softBg: '#ecfdf5', border: '#a7f3d0', badgeBg: '#d1fae5', badgeText: '#047857' },
+                  items: detailingPrices.filter(i =>
+                    ['膜面深層清潔（包膜車專用）', '膜面鍍膜'].includes(i.itemName)
+                  ),
+                },
+              ];
 
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '40px', gridColumn: 'span 2' }}>
-                {[
-                  { title: "保養洗車、基本護理", icon: Droplets, theme: { main: '#fb923c', bg: '#f0f9ff', border: '#e0f2fe' }, items: detailingPrices.filter(i => ["經典洗", "光澤整備", "深層特勤", "鏡透打底Lv.1", "鏡透打底Lv.2", "視界去污"].includes(i.itemName)) },
-                  { title: "拋光鍍膜", icon: Sparkles, theme: { main: '#8b5cf6', bg: '#fff7ed', border: '#ffedd5' }, items: detailingPrices.filter(i => ["S1單層護盾", "S1雙層護盾", "S2單層護盾", "S2雙層護盾", "視界強化", "鋁圈守護"].includes(i.itemName)) },
-                  { title: "貼膜車專屬方案", icon: ShieldCheck, theme: { main: '#10b981', bg: '#ecfdf5', border: '#d1fae5' }, items: detailingPrices.filter(i => ["膜淨行動", "膜車專護方案"].includes(i.itemName)) }
-                ].map((group, gIdx) => {
-                  const GroupIcon = group.icon;
-                  return (
-                  <div key={gIdx}>
-                    <h3 style={{ fontSize: '1.4rem', color: '#1e293b', marginBottom: '20px', paddingBottom: '10px', display: 'flex', alignItems: 'center', gap: '10px' }}>
-                      <GroupIcon size={24} color={group.theme.main} /> {group.title}
-                    </h3>
-                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '25px' }}>
-                      {group.items.map((item, idx) => {
-                        const isExpanded = expandedDetailing.includes(group.title);
-                        
-                        // Calculate size multiplier offset based on 'S'
-                  const sizes = ['XS', 'S', 'M', 'L', 'XL', '2XL', '3XL'];
-                  const sIndex = 1; // 'S' is index 1
-                  const currentIndex = sizes.indexOf(currentSize as string);
-                  const diff = currentIndex >= 0 ? currentIndex - sIndex : 0;
-                  
-                  // Calculate base price with offset
-                  const computedBase = item.basePriceN + (diff * item.stepPrice);
-                  
-                  // Calculate member prices
-                  const priceN = computedBase;
-                  const priceS = Math.round(computedBase * item.discountS);
-                  const priceSR = Math.round(computedBase * item.discountSR);
-                  const priceUR = Math.round(computedBase * item.discountUR);
+              const visibleGroups = selectedDetailingGroup === 'all'
+                ? detailingGroups
+                : detailingGroups.filter(g => g.title === selectedDetailingGroup);
 
-                  return (
-                    <div key={idx} className="glass-panel" style={{ padding: '20px', borderRadius: '24px', border: '1px solid #e2e8f0', background: '#fff', display: 'flex', flexDirection: 'column' }}>
-                      <div 
-                        style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', cursor: 'pointer' }}
-                        onClick={() => setExpandedDetailing(prev => prev.includes(group.title) ? prev.filter(i => i !== group.title) : [...prev, group.title])}
+              const allVisibleItemNames = visibleGroups.flatMap(g => g.items.map(i => i.itemName));
+              const isAllExpanded = allVisibleItemNames.length > 0 && allVisibleItemNames.every(name => expandedDetailing.includes(name));
+
+              const sizes = ['XS', 'S', 'M', 'L', 'XL', '2XL', '3XL'];
+              const sIndex = 1; // 'S' is index 1
+              const currentIndex = sizes.indexOf(currentSize as string);
+              const diff = currentIndex >= 0 ? currentIndex - sIndex : 0;
+
+              return (
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
+                  {/* 頂部快速分類篩選列 + 展開/收合控制 */}
+                  <div style={{
+                    display: 'flex',
+                    flexWrap: 'wrap',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                    gap: '12px',
+                    background: '#fff',
+                    padding: '14px 18px',
+                    borderRadius: '18px',
+                    border: '1px solid #e2e8f0',
+                    boxShadow: '0 2px 10px rgba(15, 23, 42, 0.04)'
+                  }}>
+                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', alignItems: 'center' }}>
+                      <button
+                        onClick={() => setSelectedDetailingGroup('all')}
+                        style={{
+                          padding: '7px 14px',
+                          borderRadius: '999px',
+                          border: selectedDetailingGroup === 'all' ? '1.5px solid #0f172a' : '1px solid #e2e8f0',
+                          background: selectedDetailingGroup === 'all' ? '#0f172a' : '#f8fafc',
+                          color: selectedDetailingGroup === 'all' ? '#fff' : '#475569',
+                          fontWeight: '800',
+                          fontSize: '0.85rem',
+                          cursor: 'pointer',
+                          transition: 'all 0.15s'
+                        }}
                       >
-                        <div style={{ flex: 1 }}>
-                          <h4 style={{ margin: 0, fontSize: '1.25rem', fontWeight: '800', color: group.theme.main, display: 'flex', alignItems: 'center', gap: '8px' }}>
-                            <GroupIcon size={20} /> {item.itemName}
-                          </h4>
-                          <div style={{ fontSize: '0.85rem', color: '#64748b', marginTop: '6px', fontWeight: 'bold' }}>
-                            {item.subtitle}
-                          </div>
-                        </div>
-                        <div style={{ textAlign: 'right', display: 'flex', flexDirection: 'column', alignItems: 'flex-end' }}>
-                          <div style={{ background: '#f8fafc', padding: '4px 10px', borderRadius: '12px', fontSize: '1.1rem', fontWeight: '900', color: '#0f172a', border: '1px solid #e2e8f0' }}>
-                            $ {priceN.toLocaleString()}
-                          </div>
-                          <div style={{ color: '#94a3b8', marginTop: '6px' }}>
-                            {isExpanded ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
-                          </div>
-                        </div>
-                      </div>
-
-                      {isExpanded && (
-                        <div style={{ marginTop: '20px', paddingTop: '20px', borderTop: '1px dashed #e2e8f0', animation: 'fadeIn 0.3s ease-out' }}>
-                          <div style={{ background: group.theme.bg, padding: '15px', borderRadius: '12px', marginBottom: '20px', border: `1px solid ${group.theme.border}` }}>
-                            <div style={{ fontSize: '0.9rem', color: group.theme.main, fontWeight: 'bold', marginBottom: '10px' }}>會員專屬報價 (已包含尺寸加價)</div>
-                            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '10px', textAlign: 'center' }}>
-                              <div style={{ background: '#fff', padding: '8px', borderRadius: '8px', border: '1px solid #e2e8f0' }}>
-                                <div style={{ fontSize: '0.7rem', color: '#64748b', fontWeight: 'bold' }}>一般 (N)</div>
-                                <div style={{ fontSize: '0.9rem', color: '#0f172a', fontWeight: '900' }}>${priceN.toLocaleString()}</div>
-                              </div>
-                              <div style={{ background: '#f8fafc', padding: '8px', borderRadius: '8px', border: '1px solid #cbd5e1' }}>
-                                <div style={{ fontSize: '0.7rem', color: '#475569', fontWeight: 'bold' }}>銀卡 (S)</div>
-                                <div style={{ fontSize: '0.9rem', color: '#334155', fontWeight: '900' }}>${priceS.toLocaleString()}</div>
-                              </div>
-                              <div style={{ background: '#fffbeb', padding: '8px', borderRadius: '8px', border: '1px solid #fde68a' }}>
-                                <div style={{ fontSize: '0.7rem', color: '#b45309', fontWeight: 'bold' }}>金卡 (SR)</div>
-                                <div style={{ fontSize: '0.9rem', color: '#92400e', fontWeight: '900' }}>${priceSR.toLocaleString()}</div>
-                              </div>
-                              <div style={{ background: '#fdf4ff', padding: '8px', borderRadius: '8px', border: '1px solid #fbcfe8' }}>
-                                <div style={{ fontSize: '0.7rem', color: '#c026d3', fontWeight: 'bold' }}>黑卡 (UR)</div>
-                                <div style={{ fontSize: '0.9rem', color: '#a21caf', fontWeight: '900' }}>${priceUR.toLocaleString()}</div>
-                              </div>
-                            </div>
-                          </div>
-
-                          <div style={{ fontSize: '0.85rem', color: '#475569', lineHeight: '1.6', whiteSpace: 'pre-wrap' }}>
-                            {item.details ? item.details : <span style={{ opacity: 0.5 }}>無詳細說明</span>}
-                          </div>
-                        </div>
-                      )}
+                        全部方案 ({detailingPrices.length})
+                      </button>
+                      {detailingGroups.map((g) => {
+                        const isSelected = selectedDetailingGroup === g.title;
+                        const GIcon = g.icon;
+                        return (
+                          <button
+                            key={g.title}
+                            onClick={() => setSelectedDetailingGroup(g.title)}
+                            style={{
+                              padding: '7px 14px',
+                              borderRadius: '999px',
+                              border: isSelected ? `1.5px solid ${g.theme.main}` : '1px solid #e2e8f0',
+                              background: isSelected ? g.theme.main : '#f8fafc',
+                              color: isSelected ? '#fff' : '#475569',
+                              fontWeight: '800',
+                              fontSize: '0.85rem',
+                              cursor: 'pointer',
+                              display: 'flex',
+                              alignItems: 'center',
+                              gap: '6px',
+                              transition: 'all 0.15s'
+                            }}
+                          >
+                            <GIcon size={15} />
+                            {g.title} ({g.items.length})
+                          </button>
+                        );
+                      })}
                     </div>
-                  );
-                })}
-                    </div>
+
+                    <button
+                      onClick={() => {
+                        if (isAllExpanded) {
+                          setExpandedDetailing(prev => prev.filter(n => !allVisibleItemNames.includes(n)));
+                        } else {
+                          setExpandedDetailing(prev => Array.from(new Set([...prev, ...allVisibleItemNames])));
+                        }
+                      }}
+                      style={{
+                        padding: '7px 14px',
+                        borderRadius: '10px',
+                        border: '1px solid #cbd5e1',
+                        background: '#fff',
+                        color: '#334155',
+                        fontWeight: '700',
+                        fontSize: '0.82rem',
+                        cursor: 'pointer',
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '5px',
+                        whiteSpace: 'nowrap'
+                      }}
+                    >
+                      {isAllExpanded ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
+                      {isAllExpanded ? '收合全部流程' : '展開全部流程'}
+                    </button>
                   </div>
-                );
-              })}
-              </div>
 
-              {/* 溫馨提示區 */}
-              <div className="glass-panel col-span-2" style={{ padding: '15px 20px', borderRadius: '16px', background: '#f8fafc', border: '1px solid #e2e8f0', display: 'flex', alignItems: 'center', gap: '10px', gridColumn: 'span 2' }}>
-                <Info size={18} color="#fb923c" />
-                <span style={{ fontSize: '0.85rem', color: '#64748b', fontWeight: '500' }}>
-                  💡 <strong>洗車美容報價說明：</strong>此頁面僅供對應車型之「美容/洗車尺寸級距」查詢。實際施工金額與工時評估，請洽門市技術人員或參閱店內實體價目表。
-                </span>
-              </div>
+                  {/* 各分類區塊 */}
+                  {visibleGroups.map((group) => {
+                    const GroupIcon = group.icon;
+                    return (
+                      <section
+                        key={group.title}
+                        style={{
+                          background: '#fff',
+                          borderRadius: '22px',
+                          border: `1px solid ${group.theme.border}`,
+                          padding: '22px',
+                          boxShadow: '0 4px 18px rgba(15, 23, 42, 0.04)'
+                        }}
+                      >
+                        {/* 分類標題列 */}
+                        <div style={{
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'space-between',
+                          marginBottom: '18px',
+                          paddingBottom: '12px',
+                          borderBottom: `2px solid ${group.theme.softBg}`
+                        }}>
+                          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                            <div style={{
+                              width: '38px',
+                              height: '38px',
+                              borderRadius: '12px',
+                              background: group.theme.softBg,
+                              border: `1px solid ${group.theme.border}`,
+                              display: 'flex',
+                              alignItems: 'center',
+                              justifyContent: 'center',
+                              color: group.theme.main
+                            }}>
+                              <GroupIcon size={21} />
+                            </div>
+                            <h3 style={{ fontSize: '1.3rem', color: '#0f172a', margin: 0, fontWeight: '900' }}>
+                              {group.title}
+                            </h3>
+                          </div>
+                          <span style={{
+                            fontSize: '0.78rem',
+                            fontWeight: '800',
+                            padding: '4px 12px',
+                            borderRadius: '999px',
+                            background: group.theme.badgeBg,
+                            color: group.theme.badgeText
+                          }}>
+                            共 {group.items.length} 項服務
+                          </span>
+                        </div>
 
-            </div>
+                        {/* 服務卡片網格 (寬敞兩欄好閱讀) */}
+                        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(360px, 1fr))', gap: '18px' }}>
+                          {group.items.map((item) => {
+                            const isExpanded = expandedDetailing.includes(item.itemName);
+                            const computedBase = item.basePriceN + (diff * item.stepPrice);
+                            const priceN = computedBase;
+                            const priceS = Math.round(computedBase * item.discountS);
+                            const priceSR = Math.round(computedBase * item.discountSR);
+                            const priceUR = Math.round(computedBase * item.discountUR);
+
+                            const toggleCard = () => {
+                              setExpandedDetailing(prev =>
+                                prev.includes(item.itemName)
+                                  ? prev.filter(n => n !== item.itemName)
+                                  : [...prev, item.itemName]
+                              );
+                            };
+
+                            return (
+                              <div
+                                key={item.itemName}
+                                style={{
+                                  borderRadius: '18px',
+                                  border: `1px solid ${isExpanded ? group.theme.main : '#e2e8f0'}`,
+                                  borderTop: `4px solid ${group.theme.main}`,
+                                  background: '#fff',
+                                  display: 'flex',
+                                  flexDirection: 'column',
+                                  justifyContent: 'space-between',
+                                  overflow: 'hidden',
+                                  boxShadow: isExpanded ? '0 10px 25px -5px rgba(15, 23, 42, 0.08)' : '0 2px 6px rgba(15, 23, 42, 0.03)',
+                                  transition: 'all 0.2s ease'
+                                }}
+                              >
+                                <div style={{ padding: '18px 18px 14px 18px' }}>
+                                  {/* 標題與主價格 */}
+                                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: '12px' }}>
+                                    <div style={{ flex: 1, minWidth: 0 }}>
+                                      <h4 style={{
+                                        margin: 0,
+                                        fontSize: '1.12rem',
+                                        fontWeight: '900',
+                                        color: '#0f172a',
+                                        lineHeight: '1.35'
+                                      }}>
+                                        {item.itemName}
+                                      </h4>
+                                      <div style={{
+                                        fontSize: '0.84rem',
+                                        color: '#64748b',
+                                        marginTop: '6px',
+                                        lineHeight: '1.45',
+                                        fontWeight: '600'
+                                      }}>
+                                        {item.subtitle.replace(/^\|\s*/, '')}
+                                      </div>
+                                    </div>
+                                    <div style={{
+                                      textAlign: 'right',
+                                      flexShrink: 0,
+                                      background: group.theme.softBg,
+                                      padding: '8px 12px',
+                                      borderRadius: '12px',
+                                      border: `1px solid ${group.theme.border}`
+                                    }}>
+                                      <div style={{ fontSize: '0.68rem', color: group.theme.badgeText, fontWeight: '800', marginBottom: '2px' }}>
+                                        一般價 ({currentSize})
+                                      </div>
+                                      <div style={{ fontSize: '1.22rem', fontWeight: '900', color: '#0f172a', lineHeight: '1.1', whiteSpace: 'nowrap' }}>
+                                        ${priceN.toLocaleString()}
+                                      </div>
+                                    </div>
+                                  </div>
+
+                                  {/* 直接顯示四階會員價對照條 (免點擊即可一眼查看) */}
+                                  <div style={{
+                                    marginTop: '14px',
+                                    display: 'grid',
+                                    gridTemplateColumns: 'repeat(4, 1fr)',
+                                    gap: '6px',
+                                    textAlign: 'center'
+                                  }}>
+                                    <div style={{ background: '#f8fafc', padding: '6px 4px', borderRadius: '8px', border: '1px solid #e2e8f0' }}>
+                                      <div style={{ fontSize: '0.68rem', color: '#64748b', fontWeight: '700' }}>一般 N</div>
+                                      <div style={{ fontSize: '0.84rem', color: '#0f172a', fontWeight: '900', marginTop: '2px' }}>${priceN.toLocaleString()}</div>
+                                    </div>
+                                    <div style={{ background: '#f1f5f9', padding: '6px 4px', borderRadius: '8px', border: '1px solid #cbd5e1' }}>
+                                      <div style={{ fontSize: '0.68rem', color: '#475569', fontWeight: '700' }}>銀卡 95折</div>
+                                      <div style={{ fontSize: '0.84rem', color: '#334155', fontWeight: '900', marginTop: '2px' }}>${priceS.toLocaleString()}</div>
+                                    </div>
+                                    <div style={{ background: '#fffbeb', padding: '6px 4px', borderRadius: '8px', border: '1px solid #fde68a' }}>
+                                      <div style={{ fontSize: '0.68rem', color: '#b45309', fontWeight: '700' }}>金卡 9折</div>
+                                      <div style={{ fontSize: '0.84rem', color: '#92400e', fontWeight: '900', marginTop: '2px' }}>${priceSR.toLocaleString()}</div>
+                                    </div>
+                                    <div style={{ background: '#fdf4ff', padding: '6px 4px', borderRadius: '8px', border: '1px solid #f5d0fe' }}>
+                                      <div style={{ fontSize: '0.68rem', color: '#a21caf', fontWeight: '700' }}>黑卡 8折</div>
+                                      <div style={{ fontSize: '0.84rem', color: '#86198f', fontWeight: '900', marginTop: '2px' }}>${priceUR.toLocaleString()}</div>
+                                    </div>
+                                  </div>
+
+                                  {/* 展開的詳細施工流程 */}
+                                  {isExpanded && (
+                                    <div style={{
+                                      marginTop: '14px',
+                                      padding: '14px',
+                                      borderRadius: '12px',
+                                      background: '#f8fafc',
+                                      border: '1px solid #e2e8f0',
+                                      fontSize: '0.84rem',
+                                      color: '#334155',
+                                      lineHeight: '1.7',
+                                      whiteSpace: 'pre-wrap',
+                                      animation: 'fadeIn 0.2s ease-out'
+                                    }}>
+                                      {item.details ? item.details : <span style={{ opacity: 0.5 }}>無詳細說明</span>}
+                                    </div>
+                                  )}
+                                </div>
+
+                                {/* 卡片底部展開按鈕 */}
+                                <button
+                                  onClick={toggleCard}
+                                  style={{
+                                    width: '100%',
+                                    padding: '10px 16px',
+                                    background: isExpanded ? group.theme.softBg : '#f8fafc',
+                                    border: 'none',
+                                    borderTop: '1px solid #f1f5f9',
+                                    color: isExpanded ? group.theme.badgeText : '#64748b',
+                                    fontSize: '0.8rem',
+                                    fontWeight: '700',
+                                    cursor: 'pointer',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    gap: '6px',
+                                    transition: 'background 0.15s'
+                                  }}
+                                >
+                                  {isExpanded ? (
+                                    <>收合服務流程 <ChevronUp size={16} /></>
+                                  ) : (
+                                    <>查看服務流程與說明 <ChevronDown size={16} /></>
+                                  )}
+                                </button>
+                              </div>
+                            );
+                          })}
+                        </div>
+                      </section>
+                    );
+                  })}
+
+                  {/* 溫馨提示區 */}
+                  <div className="glass-panel" style={{ padding: '15px 20px', borderRadius: '16px', background: '#f8fafc', border: '1px solid #e2e8f0', display: 'flex', alignItems: 'center', gap: '10px' }}>
+                    <Info size={18} color="#fb923c" style={{ flexShrink: 0 }} />
+                    <span style={{ fontSize: '0.85rem', color: '#64748b', fontWeight: '500' }}>
+                      💡 <strong>洗車美容報價說明：</strong>此頁面已依所選車型自動帶入「{currentSize} 尺寸」對應金額與各卡別會員價。實際施工金額與工時評估，請洽門市技術人員或參閱店內實體價目表。
+                    </span>
+                  </div>
+                </div>
+              );
+            })()
           ) : (
             /* 貼膜服務報價內容 */
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '25px' }}>
