@@ -635,7 +635,7 @@ export const PriceInquiryPage: React.FC<PriceInquiryPageProps> = ({ vehicleMaste
                   icon: Droplets,
                   theme: { main: '#ea580c', softBg: '#fff7ed', border: '#fed7aa', badgeBg: '#ffedd5', badgeText: '#c2410c' },
                   items: detailingPrices.filter(i =>
-                    ['精緻洗車保養＆內裝清潔', '漆面深層清潔（非包膜車專用）', '漆面基礎拋光修復', '漆面深層拋光修復', '視界去污'].includes(i.itemName)
+                    ['精緻洗車保養＆內裝清潔', '漆面深層清潔（非包膜車專用）', '漆面基礎拋光修復', '漆面深層拋光修復', '前擋除油墨'].includes(i.itemName)
                   ),
                 },
                 {

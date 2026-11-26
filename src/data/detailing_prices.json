@@ -120,9 +120,9 @@
     "stepPrice": 0
   },
   {
-    "itemName": "視界去污",
-    "subtitle": "前擋除油墨",
-    "details": "🪟 前擋除油膜\r\n改善雨天視線與玻璃清晰度\r\n服務流程：\r\n油膜與污染層去除\r\n玻璃表面整平處理\r\n清潔與收尾\r\n視線清晰度確認",
+    "itemName": "前擋除油墨",
+    "subtitle": "改善雨天視線與前擋玻璃清晰度",
+    "details": "🪟 前擋除油墨\r\n改善雨天視線與玻璃清晰度\r\n服務流程：\r\n油膜與污染層去除\r\n玻璃表面整平處理\r\n清潔與收尾\r\n視線清晰度確認",
     "basePriceN": 500,
     "discountS": 0.95,
     "discountSR": 0.9,
